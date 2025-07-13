@@ -5,11 +5,11 @@ import { Outlet, useLocation } from "@tanstack/react-router";
 export function Layout() {
   const location = useLocation()
 
-  const isHome = location.pathname === '/'
+  const isPageHome = location.pathname === '/'
 
   return (
     <Box>
-      {isHome ? (
+      {isPageHome ? (
         <Outlet />
       ) : (
         <MainContainer>

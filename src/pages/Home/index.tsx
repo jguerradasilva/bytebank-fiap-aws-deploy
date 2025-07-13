@@ -3,7 +3,7 @@ import Footer from "@components/Footer";
 import Navbar from "@components/Navbar";
 import { Box } from "@mui/material";
 
-export default function Home() {
+export default function PageHome() {
   return (
     <>
       <Navbar />

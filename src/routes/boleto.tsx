@@ -1,9 +1,6 @@
+import PageBoleto from '@pages/Boleto'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/boleto')({
-  component: RouteComponent,
+  component: () => <PageBoleto />
 })
-
-function RouteComponent() {
-  return <div>Hello "/boleto"!</div>
-}

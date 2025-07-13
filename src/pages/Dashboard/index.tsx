@@ -8,7 +8,7 @@ import CardPoupanca from "@components/CardPoupanca";
 import CardInvestimentos from "@components/CardInvestimentos";
 import CardServicos from "@components/CardServicos";
 
-export default function Dashboard() {
+export default function PageDashboard() {
   return (
     <>
       <Box

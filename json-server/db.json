@@ -135,7 +135,7 @@
       "tipo": "Boleto (Conta Corrente)",
       "descricao": "Xbox Game Pass",
       "horario": "11:54",
-      "valor": -50,
+      "valor": -1,
       "icone": "LanguageIcon",
       "data": "2025-05-24",
       "conta": "conta-corrente"
@@ -148,6 +148,16 @@
       "valor": -270.82,
       "icone": "LanguageIcon",
       "data": "2025-05-24",
+      "conta": "conta-corrente"
+    },
+    {
+      "id": "3acc",
+      "tipo": "Depósito",
+      "descricao": "Conta Corrente",
+      "horario": "21:56",
+      "valor": 343,
+      "icone": "AttachMoneyIcon",
+      "data": "2025-07-13",
       "conta": "conta-corrente"
     }
   ]
