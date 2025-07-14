@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   List,
   ListItem,
@@ -11,143 +11,90 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import LanguageIcon from '@mui/icons-material/Language';
 import CloseIcon from '@mui/icons-material/Close';
-import { type ReactNode } from 'react';
 import ButtonServices from '@components/ButtonServices';
+import type { Extrato } from 'src/types/Extrato';
+import {
+  useMutationDeleteExtrato,
+  useMutationUpdateExtrato,
+  useQueryGetExtrato,
+} from '@hooks/useQueryExtrato';
+import { agruparPorData } from '@utils/agrupaPorData';
+import { Slide, toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { formatarDataGrupo } from '@utils/formataDataGrupo';
+import { formatarValor } from '@utils/formataValor';
+import { getIconComponent } from '@utils/getIconComponent';
 
-export type ExtratoItem = {
-  id: number;
-  tipo: string;
-  descricao: string;
-  horario: string;
-  valor: number;
-  icone: ReactNode;
-  data: string;
-  conta?: string;
-};
-
-type ExtratoListProps = {
-  itens: ExtratoItem[];
-};
-
-function formatarDataGrupo(dataStr: string): string {
-  // dataStr sempre no formato "YYYY-MM-DD"
-  const hoje = new Date();
-  const [ano, mes, dia] = dataStr.split('-').map(Number);
-  const data = new Date(ano, mes - 1, dia);
-
-  // Zera horas para comparar apenas o dia
-  const hojeZero = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-  const dataZero = new Date(data.getFullYear(), data.getMonth(), data.getDate());
-
-  const diffTime = hojeZero.getTime() - dataZero.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) return 'Hoje';
-  if (diffDays === 1) return 'Ontem';
-
-  return dataZero.toLocaleDateString('pt-BR');
-}
-
-function agruparPorData(itens: ExtratoItem[]): Record<string, ExtratoItem[]> {
-  return itens.reduce((acc, item) => {
-    const chave = item.data;
-    if (!acc[chave]) acc[chave] = [];
-    acc[chave].push(item);
-    return acc;
-  }, {} as Record<string, ExtratoItem[]>);
-}
-
-function formatarValor(valor: number): string {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-  }).format(valor);
-}
-
-export default function ExtratoList({ itens }: ExtratoListProps) {
-  const [dados, setDados] = useState<any[]>([]);
-  const [editandoId, setEditandoId] = useState<number | null>(null);
+export default function ExtratoList() {
+  const [editandoId, setEditandoId] = useState<string | null>(null);
   const [novoValor, setNovoValor] = useState<string>('');
 
-  useEffect(() => {
-    const fetchDados = () => {
-      fetch('http://localhost:3001/extrato')
-        .then((res) => res.json())
-        .then((data) => {
-          setDados(data.map((item: any) => ({
-            ...item,
-          })));
-        });
-    };
-    fetchDados();
-    const interval = setInterval(fetchDados, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  const { data } = useQueryGetExtrato();
+  const updateMutate = useMutationUpdateExtrato();
+  const deleteMutate = useMutationDeleteExtrato();
 
-  const grupos = agruparPorData(dados);
+  const grupos = agruparPorData(data as Extrato[]);
 
-  const datasOrdenadas = Object.keys(grupos).sort((a, b) => {
-    // Ordena do mais recente para o mais antigo
-    if (a > b) return -1;
-    if (a < b) return 1;
-    return 0;
-  });
+  const datasOrdenadas = grupos
+    ? Object.keys(grupos).sort((a, b) => {
+        if (a > b) return -1;
+        if (a < b) return 1;
+        return 0;
+      })
+    : [];
 
-  // Função para editar valor
-  const handleEditClick = (item: ExtratoItem) => {
+  function handleEditClick(item: Extrato) {
     setEditandoId(item.id);
     setNovoValor(item.valor.toString().replace('.', ','));
-  };
+  }
 
-  const handleSave = async (item: ExtratoItem) => {
+  function handleUpdate(item: Extrato) {
     const valorNumber = Number(novoValor.replace(',', '.'));
     if (isNaN(valorNumber)) {
-      window.alert('Valor inválido!');
+      toast.error('Valor inválido!');
       return;
     }
-    await fetch(`http://localhost:3001/extrato/${item.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ valor: valorNumber }),
-    });
+
+    updateMutate.mutateAsync({ id: item.id, valor: valorNumber });
     setEditandoId(null);
     setNovoValor('');
-    // O useEffect já atualiza a lista
-  };
+  }
 
-  // Função para deletar item
-  const handleDelete = async (item: ExtratoItem) => {
-    const confirmar = window.confirm(
-      `Deseja realmente excluir "${item.descricao}"?`
-    );
-    if (!confirmar) return;
-    await fetch(`http://localhost:3001/extrato/${item.id}`, {
-      method: 'DELETE',
-    });
-    // Não precisa recarregar, pois o useEffect já atualiza a cada 2s
-  };
-
-  const handleCancel = () => {
-    setEditandoId(null);
-    setNovoValor('');
-  };
-
-  function getIconComponent(iconName: string) {
-    switch (iconName) {
-      case 'AttachMoneyIcon':
-        return <AttachMoneyIcon />;
-      case 'StorefrontIcon':
-        return <StorefrontIcon />;
-      case 'LanguageIcon':
-        return <LanguageIcon />;
-      default:
-        return <AttachMoneyIcon />;
+  async function handleDelete(item: Extrato) {
+    if (!item) {
+      return;
     }
+
+    Swal.fire({
+      title: 'Você tem certeza?',
+      html: `<p>Esta ação removerá o extrato ${item.descricao}. Deseja continuar?</p>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, remover!',
+      cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        deleteMutate.mutateAsync({ id: item.id });
+
+        toast.success('Extrato foi excluído.', {
+          position: 'bottom-right',
+          autoClose: 9000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide,
+        });
+      }
+    });
+  }
+
+  function handleCancel() {
+    setEditandoId(null);
+    setNovoValor('');
   }
 
   return (
@@ -200,7 +147,7 @@ export default function ExtratoList({ itens }: ExtratoListProps) {
                             edge="end"
                             aria-label="save"
                             sx={{ color: '#388e3c', mr: 2 }}
-                            onClick={() => handleSave(item)}
+                            onClick={() => handleUpdate(item)}
                           >
                             <EditIcon />
                           </IconButton>
@@ -239,7 +186,10 @@ export default function ExtratoList({ itens }: ExtratoListProps) {
                     }}
                   >
                     <ListItemAvatar sx={{ mr: 2 }}>
-                      <ButtonServices icon={getIconComponent(item.icone as string)} disabled />
+                      <ButtonServices
+                        icon={React.createElement(getIconComponent(item.icone))}
+                        disabled
+                      />
                     </ListItemAvatar>
                     <ListItemText
                       primary={item.tipo}

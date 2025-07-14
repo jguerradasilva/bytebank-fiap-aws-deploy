@@ -1,7 +1,7 @@
-import Content from "@components/Content";
-import Footer from "@components/Footer";
-import Navbar from "@components/Navbar";
-import { Box } from "@mui/material";
+import Content from '@components/Content';
+import Footer from '@components/Footer';
+import Navbar from '@components/Navbar';
+import { Box } from '@mui/material';
 
 export default function PageHome() {
   return (

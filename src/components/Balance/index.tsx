@@ -1,62 +1,51 @@
-import { Box, Typography } from "@mui/material"
-import VisibilityIcon from "@mui/icons-material/Visibility"
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
-import logoSmall from "@assets/logo_small_white.png"
-import { useState, useEffect } from "react"
-import { Link } from "@tanstack/react-router"
+import { Box, Typography } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import logoSmall from '@assets/logo_small_white.png';
+import { useMemo, useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { useQueryGetExtrato } from '@hooks/useQueryExtrato';
 
 export default function Balance() {
-  const [showedBalance, setShowBalance] = useState(false)
-  const [saldoCorrente, setSaldoCorrente] = useState<string>("R$ 0,00")
+  const [showedBalance, setShowBalance] = useState(false);
+  const { data } = useQueryGetExtrato();
 
   function handleShowBalance() {
-    setShowBalance(!showedBalance)
+    setShowBalance(!showedBalance);
   }
 
-  useEffect(() => {
-    const fetchBalances = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/extrato")
-        const data = await res.json()
+  console.log(data);
 
-        const totalCorrente = data
-          .filter((item: any) => item.conta === "conta-corrente")
-          .reduce((acc: number, item: any) => acc + Number(item.valor), 0)
+  const totalCorrente = useMemo(() => {
+    if (!data) return null;
 
-        setSaldoCorrente(
-          totalCorrente.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-            minimumFractionDigits: 2,
-          })
-        )
-      } catch (e) {
-        setSaldoCorrente("R$ 0,00")
-      }
-    }
+    const total = data
+      .filter((item) => item.conta === 'conta-corrente')
+      .reduce((acc, item) => acc + Number(item.valor), 0);
 
-    fetchBalances()
-    const interval = setInterval(fetchBalances, 2000)
-
-    return () => clearInterval(interval)
-  }, [])
+    return total.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+    });
+  }, [data]);
 
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        color: "white",
-        borderBottom: "1px solid #454545",
+        display: 'flex',
+        flexDirection: 'column',
+        color: 'white',
+        borderBottom: '1px solid #454545',
         px: 2,
         py: 3,
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Typography variant="h6" fontWeight={600}>
@@ -67,15 +56,15 @@ export default function Balance() {
 
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
+          display: 'flex',
+          justifyContent: 'space-between',
           mt: 1,
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: 2,
             px: 4,
           }}
@@ -83,27 +72,27 @@ export default function Balance() {
           <Typography
             variant="h4"
             sx={{
-              filter: showedBalance ? "none" : "blur(6px)",
-              transition: "filter 0.4s",
-              userSelect: showedBalance ? "text" : "none",
+              filter: showedBalance ? 'none' : 'blur(6px)',
+              transition: 'filter 0.4s',
+              userSelect: showedBalance ? 'text' : 'none',
             }}
           >
-            {saldoCorrente}
+            {totalCorrente ?? 'R$ 0,00'}
           </Typography>
 
           {showedBalance ? (
             <VisibilityOffIcon
               sx={{
-                cursor: "pointer",
-                fontSize: { xs: "20px", sm: "24px" },
+                cursor: 'pointer',
+                fontSize: { xs: '20px', sm: '24px' },
               }}
               onClick={handleShowBalance}
             />
           ) : (
             <VisibilityIcon
               sx={{
-                cursor: "pointer",
-                fontSize: { xs: "20px", sm: "24px" },
+                cursor: 'pointer',
+                fontSize: { xs: '20px', sm: '24px' },
               }}
               onClick={handleShowBalance}
             />
@@ -113,9 +102,9 @@ export default function Balance() {
         <Link to="/extrato" className="">
           <Typography
             sx={{
-              color: "white",
-              textDecoration: "underline",
-              cursor: "pointer",
+              color: 'white',
+              textDecoration: 'underline',
+              cursor: 'pointer',
             }}
           >
             Ver extrato
@@ -123,5 +112,5 @@ export default function Balance() {
         </Link>
       </Box>
     </Box>
-  )
+  );
 }

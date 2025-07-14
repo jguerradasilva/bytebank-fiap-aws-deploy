@@ -47,6 +47,9 @@
       "@styles/*": [
         "src/styles/*"
       ],
+      "@config/*": [
+        "src/config/*"
+      ],
     }
   },
   "include": [
