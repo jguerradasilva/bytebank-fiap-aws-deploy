@@ -5,6 +5,7 @@ import { routeTree } from './routeTree.gen'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { useTheme } from '@styles/useTheme'
 import '@styles/App.css'
+import { ToastContainer } from 'react-toastify'
 const router = createRouter({ routeTree })
 
 declare module '@tanstack/react-router' {
@@ -20,6 +21,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <RouterProvider router={router} />
+      <ToastContainer />
     </ThemeProvider>
   )
 }

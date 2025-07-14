@@ -24,7 +24,7 @@ export async function updateExtrato(
   id: string,
   valor: number
 ): Promise<Extrato[]> {
-  const response = await api.patch<Extrato[]>(`${ENV.EXTRATO}/${id}`, valor);
+  const response = await api.patch<Extrato[]>(`${ENV.EXTRATO}/${id}`, {valor});
   return response.data;
 }
 

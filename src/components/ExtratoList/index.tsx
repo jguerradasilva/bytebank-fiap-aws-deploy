@@ -25,11 +25,12 @@ import Swal from 'sweetalert2';
 import { formatarDataGrupo } from '@utils/formataDataGrupo';
 import { formatarValor } from '@utils/formataValor';
 import { getIconComponent } from '@utils/getIconComponent';
+import { Loading } from '@components/Loading';
 
 export default function ExtratoList() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [novoValor, setNovoValor] = useState<string>('');
-
+  const [loading, setLoading] = useState(false);
   const { data } = useQueryGetExtrato();
   const updateMutate = useMutationUpdateExtrato();
   const deleteMutate = useMutationDeleteExtrato();
@@ -38,10 +39,10 @@ export default function ExtratoList() {
 
   const datasOrdenadas = grupos
     ? Object.keys(grupos).sort((a, b) => {
-        if (a > b) return -1;
-        if (a < b) return 1;
-        return 0;
-      })
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
+    })
     : [];
 
   function handleEditClick(item: Extrato) {
@@ -49,36 +50,63 @@ export default function ExtratoList() {
     setNovoValor(item.valor.toString().replace('.', ','));
   }
 
-  function handleUpdate(item: Extrato) {
+  async function handleUpdate(item: Extrato) {
+    if (!item) return;
+
     const valorNumber = Number(novoValor.replace(',', '.'));
     if (isNaN(valorNumber)) {
       toast.error('Valor inválido!');
       return;
     }
 
-    updateMutate.mutateAsync({ id: item.id, valor: valorNumber });
-    setEditandoId(null);
-    setNovoValor('');
+    try {
+      setLoading(true);
+
+      await updateMutate.mutateAsync({ id: item.id, valor: valorNumber });
+
+      toast.success('Extrato atualizado com sucesso.', {
+        position: 'top-right',
+        autoClose: 9000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide,
+      });
+
+      setEditandoId(null);
+      setNovoValor('');
+    } catch (e) {
+      console.error('Erro ao atualizar:', e);
+      toast.error('Erro ao atualizar o extrato.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleDelete(item: Extrato) {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
 
-    Swal.fire({
-      title: 'Você tem certeza?',
-      html: `<p>Esta ação removerá o extrato ${item.descricao}. Deseja continuar?</p>`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, remover!',
-      cancelButtonText: 'Cancelar',
-    }).then(async (result) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Você tem certeza?',
+        html: `<p>Esta ação removerá o extrato. Deseja continuar?</p>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, remover!',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#236B7A',
+      });
+
       if (result.isConfirmed) {
-        deleteMutate.mutateAsync({ id: item.id });
+        setLoading(true);
 
-        toast.success('Extrato foi excluído.', {
-          position: 'bottom-right',
+        await deleteMutate.mutateAsync({ id: item.id });
+
+        toast.success('Extrato excluído com sucesso.', {
+          position: 'top-right',
           autoClose: 9000,
           hideProgressBar: false,
           closeOnClick: false,
@@ -88,9 +116,15 @@ export default function ExtratoList() {
           theme: 'colored',
           transition: Slide,
         });
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
-    });
+    } catch (e) {
+      console.error('Erro ao excluir:', e);
+    } finally {
+      setLoading(false);
+    }
   }
+
 
   function handleCancel() {
     setEditandoId(null);
@@ -98,147 +132,150 @@ export default function ExtratoList() {
   }
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        mx: 2,
-        maxHeight: '60vh',
-        overflowY: 'auto',
-        scrollbarGutter: 'stable',
-        borderRadius: 2,
-        p: 1,
-      }}
-    >
-      <List
+    <>
+      <Loading show={loading} />
+      <Box
         sx={{
           width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
+          mx: 2,
+          maxHeight: '60vh',
+          overflowY: 'auto',
+          scrollbarGutter: 'stable',
+          borderRadius: 2,
+          p: 1,
         }}
       >
-        {datasOrdenadas.map((data) => (
-          <React.Fragment key={data}>
-            <Typography
-              variant="h6"
-              sx={{
-                mt: 2,
-                ml: 2,
-                fontWeight: 600,
-              }}
-            >
-              {formatarDataGrupo(data)}
-            </Typography>
-            {grupos[data]
-              .slice()
-              .sort((a, b) =>
-                a.horario < b.horario ? 1 : a.horario > b.horario ? -1 : 0
-              )
-              .map((item) => {
-                const isNegative = item.valor < 0;
-                const isEditing = editandoId === item.id;
-                return (
-                  <ListItem
-                    key={item.id}
-                    secondaryAction={
-                      isEditing ? (
-                        <>
-                          <IconButton
-                            edge="end"
-                            aria-label="save"
-                            sx={{ color: '#388e3c', mr: 2 }}
-                            onClick={() => handleUpdate(item)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            edge="end"
-                            aria-label="cancel"
-                            sx={{ color: '#d32f2f' }}
-                            onClick={handleCancel}
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        </>
-                      ) : (
-                        <>
-                          <IconButton
-                            edge="end"
-                            aria-label="edit"
-                            sx={{ color: '#000', mr: 2 }}
-                            onClick={() => handleEditClick(item)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            sx={{ color: '#000' }}
-                            onClick={() => handleDelete(item)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </>
-                      )
-                    }
-                    sx={{
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <ListItemAvatar sx={{ mr: 2 }}>
-                      <ButtonServices
-                        icon={React.createElement(getIconComponent(item.icone))}
-                        disabled
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={item.tipo}
-                      secondary={
-                        <>
-                          <Typography component="span" variant="inherit">
-                            {item.descricao}
-                          </Typography>
-                          <br />
-                          <Typography component="span" variant="caption">
-                            {item.horario}
-                          </Typography>
-                        </>
-                      }
-                      sx={{
-                        flex: 2,
-                        '& .MuiListItemText-primary': { color: '#000' },
-                        '& .MuiListItemText-secondary': { color: '#000' },
-                      }}
-                    />
-                    <ListItemText
-                      secondary={
+        <List
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+          }}
+        >
+          {datasOrdenadas.map((data) => (
+            <React.Fragment key={data}>
+              <Typography
+                variant="h6"
+                sx={{
+                  mt: 2,
+                  ml: 2,
+                  fontWeight: 600,
+                }}
+              >
+                {formatarDataGrupo(data)}
+              </Typography>
+              {grupos[data]
+                .slice()
+                .sort((a, b) =>
+                  a.horario < b.horario ? 1 : a.horario > b.horario ? -1 : 0
+                )
+                .map((item) => {
+                  const isNegative = item.valor < 0;
+                  const isEditing = editandoId === item.id;
+                  return (
+                    <ListItem
+                      key={item.id}
+                      secondaryAction={
                         isEditing ? (
-                          <TextField
-                            size="small"
-                            value={novoValor}
-                            onChange={(e) => setNovoValor(e.target.value)}
-                            sx={{ width: 90 }}
-                          />
+                          <>
+                            <IconButton
+                              edge="end"
+                              aria-label="save"
+                              sx={{ color: '#388e3c', mr: 2 }}
+                              onClick={() => handleUpdate(item)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              edge="end"
+                              aria-label="cancel"
+                              sx={{ color: '#d32f2f' }}
+                              onClick={handleCancel}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </>
                         ) : (
-                          formatarValor(item.valor)
+                          <>
+                            <IconButton
+                              edge="end"
+                              aria-label="edit"
+                              sx={{ color: '#000', mr: 2 }}
+                              onClick={() => handleEditClick(item)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              edge="end"
+                              aria-label="delete"
+                              sx={{ color: '#000' }}
+                              onClick={() => handleDelete(item)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
                         )
                       }
                       sx={{
-                        '& .MuiListItemText-secondary': (theme) => ({
-                          color: isNegative
-                            ? theme.palette.error.main
-                            : theme.palette.success.main,
-                          fontWeight: 600,
-                        }),
-                        textAlign: 'center',
+                        flexWrap: 'wrap',
                       }}
-                    />
-                  </ListItem>
-                );
-              })}
-          </React.Fragment>
-        ))}
-      </List>
-    </Box>
+                    >
+                      <ListItemAvatar sx={{ mr: 2 }}>
+                        <ButtonServices
+                          icon={React.createElement(getIconComponent(item.icone))}
+                          disabled
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={item.tipo}
+                        secondary={
+                          <>
+                            <Typography component="span" variant="inherit">
+                              {item.descricao}
+                            </Typography>
+                            <br />
+                            <Typography component="span" variant="caption">
+                              {item.horario}
+                            </Typography>
+                          </>
+                        }
+                        sx={{
+                          flex: 2,
+                          '& .MuiListItemText-primary': { color: '#000' },
+                          '& .MuiListItemText-secondary': { color: '#000' },
+                        }}
+                      />
+                      <ListItemText
+                        secondary={
+                          isEditing ? (
+                            <TextField
+                              size="small"
+                              value={novoValor}
+                              onChange={(e) => setNovoValor(e.target.value)}
+                              sx={{ width: 90 }}
+                            />
+                          ) : (
+                            formatarValor(item.valor)
+                          )
+                        }
+                        sx={{
+                          '& .MuiListItemText-secondary': (theme) => ({
+                            color: isNegative
+                              ? theme.palette.error.main
+                              : theme.palette.success.main,
+                            fontWeight: 600,
+                          }),
+                          textAlign: 'center',
+                        }}
+                      />
+                    </ListItem>
+                  );
+                })}
+            </React.Fragment>
+          ))}
+        </List>
+      </Box>
+    </>
   );
 }
