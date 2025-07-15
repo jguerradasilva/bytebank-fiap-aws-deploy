@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import ButtonServices from '@components/ButtonServices';
 import type { Extrato } from 'src/types/Extrato';
+import { NumericFormat } from 'react-number-format'
 import {
   useMutationDeleteExtrato,
   useMutationUpdateExtrato,
@@ -26,6 +27,7 @@ import { formatarDataGrupo } from '@utils/formataDataGrupo';
 import { formatarValor } from '@utils/formataValor';
 import { getIconComponent } from '@utils/getIconComponent';
 import { Loading } from '@components/Loading';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default function ExtratoList() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -53,8 +55,16 @@ export default function ExtratoList() {
   async function handleUpdate(item: Extrato) {
     if (!item) return;
 
-    const valorNumber = Number(novoValor.replace(',', '.'));
+    const valorSanitizado = novoValor
+      .replace('R$', '')
+      .replace(/\./g, '')
+      .replace(',', '.')
+      .trim();
+
+    const valorNumber = Number(valorSanitizado);
+
     if (isNaN(valorNumber)) {
+      console.log('Valor inválido:', valorSanitizado);
       toast.error('Valor inválido!');
       return;
     }
@@ -62,7 +72,7 @@ export default function ExtratoList() {
     try {
       setLoading(true);
 
-      await updateMutate.mutateAsync({ id: item.id, valor: valorNumber });
+      await updateMutate.mutateAsync({ id: item.id, valor: Number(novoValor) });
 
       toast.success('Extrato atualizado com sucesso.', {
         position: 'top-right',
@@ -185,7 +195,7 @@ export default function ExtratoList() {
                               sx={{ color: '#388e3c', mr: 2 }}
                               onClick={() => handleUpdate(item)}
                             >
-                              <EditIcon />
+                              <CheckCircleIcon />
                             </IconButton>
                             <IconButton
                               edge="end"
@@ -249,10 +259,15 @@ export default function ExtratoList() {
                       <ListItemText
                         secondary={
                           isEditing ? (
-                            <TextField
+                            <NumericFormat
                               size="small"
+                              customInput={TextField}
                               value={novoValor}
-                              onChange={(e) => setNovoValor(e.target.value)}
+                              prefix="R$ "
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              onValueChange={(values) => setNovoValor(values.value)
+                              }
                               sx={{ width: 90 }}
                             />
                           ) : (
