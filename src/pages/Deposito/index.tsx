@@ -2,10 +2,16 @@ import Title from '@components/Title';
 import { Box, TextField, Typography } from '@mui/material';
 import CButton from '@components/CButton';
 import { useState } from 'react';
+import { Slide, toast } from 'react-toastify';
+import { useMutationPostExtrato } from '@hooks/useQueryExtrato';
+import { Loading } from '@components/Loading';
+import { NumericFormat } from 'react-number-format';
 
 export default function PageDeposito() {
   const [contaDeposito, setContaDeposito] = useState('');
   const [valor, setValor] = useState('');
+  const postMutation = useMutationPostExtrato()
+  const [loading, setLoading] = useState(false);
 
   function handleConta(conta: string) {
     setContaDeposito(conta);
@@ -13,41 +19,61 @@ export default function PageDeposito() {
 
   async function handleConcluir() {
     if (!valor || !contaDeposito) {
-      alert('Preencha o valor e selecione a conta.');
+      toast.warning('Preencha o valor e selecione a conta.');
       return;
     }
 
     const valorNumerico = Number(valor.replace(',', '.').replace('R$', '').trim());
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
-      alert('Digite um valor válido para depósito.');
+      toast.warning('Digite um valor válido para depósito.');
       return;
     }
 
-    // Monta o novo item para o extrato, agora incluindo o campo 'conta'
-    const novoItem = {
-      tipo: 'Depósito',
-      descricao: contaDeposito === 'conta-corrente' ? 'Conta Corrente' : 'Conta Poupança',
-      horario: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-      valor: valorNumerico,
-      icone: 'AttachMoneyIcon',
-      data: new Date().toISOString().slice(0, 10),
-      conta: contaDeposito, // importante para separar os saldos
-    };
+    try {
+      setLoading(true);
 
-    // Salva no db.json via json-server
-    await fetch('http://localhost:3001/extrato', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(novoItem),
-    });
+      await postMutation.mutateAsync({
+        values: {
+          tipo: 'Depósito',
+          descricao: contaDeposito === 'conta-corrente' ? 'Conta Corrente' : 'Conta Poupança',
+          horario: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          valor: valorNumerico,
+          icone: 'AttachMoneyIcon',
+          data: new Date().toISOString().slice(0, 10),
+          conta: contaDeposito,
+        }
+      });
 
-    alert('Depósito realizado com sucesso!');
-    setValor('');
-    setContaDeposito('');
+      toast.success('Depósito realizado com sucesso!', {
+        position: 'top-right',
+        autoClose: 9000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide,
+      });
+
+      setValor('');
+      setContaDeposito('');
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+    } catch (e) {
+      console.error('Erro ao realizar a transferência:', e);
+      toast.error('Erro ao realizar a transferência.');
+    } finally {
+      setLoading(false);
+    }
+
+
   }
 
   return (
     <>
+      <Loading show={loading} />
       <Title title="Realizar depósito" />
 
       <Box sx={{ p: 3, bgcolor: '#ffffff' }}>
@@ -55,18 +81,26 @@ export default function PageDeposito() {
           Qual valor deseja depositar?
         </Typography>
 
-        <TextField
-          fullWidth
-          variant="standard"
+        <NumericFormat
           placeholder="R$"
+          size="small"
+          fullWidth
+          variant='standard'
+          customInput={TextField}
           value={valor}
-          onChange={(e) => setValor(e.target.value)}
+          prefix="R$ "
+          thousandSeparator="."
+          decimalSeparator=","
+          onValueChange={(values) => setValor(values.value)}
+          sx={{ mb: 4 }}
           slotProps={{
             input: {
               disableUnderline: false,
             },
+            inputLabel: {
+              color: 'error',
+            },
           }}
-          sx={{ mb: 4 }}
         />
 
         <Box sx={{ mb: 4, width: '100%' }}>

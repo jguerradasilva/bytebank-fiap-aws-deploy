@@ -67,7 +67,7 @@ export default function PageTransferir() {
         }
       });
 
-      toast.success('Transferência realizada com sucesso.', {
+      toast.success('Transferência realizada com sucesso!', {
         position: 'top-right',
         autoClose: 9000,
         hideProgressBar: false,
@@ -82,6 +82,8 @@ export default function PageTransferir() {
       setDestinatario('');
       setValor('');
       setContaDeposito('');
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
     } catch (e) {
       console.error('Erro ao realizar a transferência:', e);

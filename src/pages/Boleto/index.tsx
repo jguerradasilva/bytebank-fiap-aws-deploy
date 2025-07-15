@@ -81,9 +81,11 @@ export default function PageBoleto() {
       setValor('');
       setConta('');
 
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
     } catch (e) {
-      console.error('Erro ao realizar a transferência:', e);
-      toast.error('Erro ao realizar a transferência.');
+      console.error('Erro ao realizar pagamento do boleto:', e);
+      toast.error('Erro ao realizar pagamento do boleto.');
     } finally {
       setLoading(false);
     }
