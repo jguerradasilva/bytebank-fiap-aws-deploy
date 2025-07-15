@@ -3,43 +3,39 @@ import {
   getExtrato,
   postExtrato,
   updateExtrato,
-} from '@services/extratoService';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import type { Extrato } from 'src/types/Extrato';
-import { queryClient } from './queryClient';
-import type { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
+} from "@services/extratoService"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import type { Extrato } from "src/types/Extrato"
+import { queryClient } from "./queryClient"
+import type { AxiosError } from "axios"
+import { toast } from "react-toastify"
 
 export function useQueryGetExtrato() {
   const useQueryGetExtrato = useQuery<Extrato[]>({
-    queryKey: ['useQueryGetExtrato'],
+    queryKey: ["useQueryGetExtrato"],
     queryFn: () => getExtrato(),
     staleTime: Infinity,
     retry: 0,
-  });
+  })
 
-  return useQueryGetExtrato;
+  return useQueryGetExtrato
 }
 
 export function useMutationPostExtrato() {
   return useMutation({
-    mutationFn: ({
-      values,
-    }: {
-      idFornecedor: number;
-      values: Omit<Extrato, 'id'>;
-    }) => postExtrato(values),
+    mutationFn: ({ values }: { values: Omit<Extrato, "id"> }) =>
+      postExtrato(values),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['useQueryGetExtrato'],
-      });
+        queryKey: ["useQueryGetExtrato"],
+      })
     },
     onError: (error: AxiosError) => {
       const message =
-        (error.response?.data as AxiosError)?.message ?? 'Erro inesperado';
-      toast.error(message);
+        (error.response?.data as AxiosError)?.message ?? "Erro inesperado"
+      toast.error(message)
     },
-  });
+  })
 }
 
 export function useMutationUpdateExtrato() {
@@ -48,15 +44,15 @@ export function useMutationUpdateExtrato() {
       updateExtrato(id, valor),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['useQueryGetExtrato'],
-      });
+        queryKey: ["useQueryGetExtrato"],
+      })
     },
     onError: (error: AxiosError) => {
       const message =
-        (error.response?.data as AxiosError)?.message ?? 'Erro inesperado';
-      toast.error(message);
+        (error.response?.data as AxiosError)?.message ?? "Erro inesperado"
+      toast.error(message)
     },
-  });
+  })
 }
 
 export function useMutationDeleteExtrato() {
@@ -64,13 +60,13 @@ export function useMutationDeleteExtrato() {
     mutationFn: ({ id }: { id: string }) => deleteExtrato(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['useQueryGetExtrato'],
-      });
+        queryKey: ["useQueryGetExtrato"],
+      })
     },
     onError: (error: AxiosError) => {
       const message =
-        (error.response?.data as AxiosError)?.message ?? 'Erro inesperado';
-      toast.error(message);
+        (error.response?.data as AxiosError)?.message ?? "Erro inesperado"
+      toast.error(message)
     },
-  });
+  })
 }

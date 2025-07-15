@@ -2,11 +2,18 @@ import Title from '@components/Title';
 import { Box, TextField, Typography } from '@mui/material';
 import CButton from '@components/CButton';
 import { useState } from 'react';
+import { Slide, toast } from 'react-toastify';
+import { useMutationPostExtrato, useQueryGetExtrato } from '@hooks/useQueryExtrato';
+import { NumericFormat } from 'react-number-format';
+import { Loading } from '@components/Loading';
 
 export default function PageTransferir() {
   const [contaDeposito, setContaDeposito] = useState('');
   const [destinatario, setDestinatario] = useState('');
   const [valor, setValor] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { data } = useQueryGetExtrato()
+  const postMutation = useMutationPostExtrato()
 
   function handleConta(conta: string) {
     setContaDeposito(conta);
@@ -14,28 +21,24 @@ export default function PageTransferir() {
 
   async function handleConcluir() {
     if (!destinatario || !valor || !contaDeposito) {
-      alert('Preencha todos os campos e selecione a conta.');
+      toast.warning('Preencha todos os campos e selecione a conta.');
       return;
     }
 
     const valorNumerico = Number(valor.replace(',', '.').replace('R$', '').trim());
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
-      alert('Digite um valor válido para transferência.');
+      toast.warning('Digite um valor válido para transferência.');
       return;
     }
 
-    // Busca o extrato para calcular o saldo da conta selecionada
-    const res = await fetch('http://localhost:3001/extrato');
-    const extrato = await res.json();
-    const saldoConta = extrato
-      .filter((item: any) => item.conta === contaDeposito)
+    const saldoConta = data?.filter((item: any) => item.conta === contaDeposito)
       .reduce((acc: number, item: any) => acc + Number(item.valor), 0);
 
-    const saldoAjustado = Number(saldoConta.toFixed(2));
+    const saldoAjustado = Number(saldoConta?.toFixed(2));
     const valorAjustado = Number(valorNumerico.toFixed(2));
 
     if (saldoAjustado < valorAjustado) {
-      alert('Saldo insuficiente para realizar a transferência.');
+      toast.warning('Saldo insuficiente para realizar a transferência.');
       return;
     }
 
@@ -46,30 +49,52 @@ export default function PageTransferir() {
           ? 'Conta Poupança'
           : contaDeposito;
 
-    const novoItem = {
-      tipo: `Transferência (${contaLabel})`,
-      descricao: destinatario,
-      horario: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-      valor: -Math.abs(valorNumerico),
-      icone: 'LanguageIcon',
-      data: new Date().toISOString().slice(0, 10),
-      conta: contaDeposito,
-    };
+    try {
+      setLoading(true);
 
-    await fetch('http://localhost:3001/extrato', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(novoItem),
-    });
+      await postMutation.mutateAsync({
+        values: {
+          tipo: `Transferência (${contaLabel})`,
+          descricao: destinatario,
+          horario: new Date().toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          valor: -Math.abs(valorNumerico),
+          icone: 'LanguageIcon',
+          data: new Date().toISOString().slice(0, 10),
+          conta: contaDeposito,
+        }
+      });
 
-    alert('Transferência realizada com sucesso!');
-    setDestinatario('');
-    setValor('');
-    setContaDeposito('');
+      toast.success('Transferência realizada com sucesso.', {
+        position: 'top-right',
+        autoClose: 9000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide,
+      });
+
+      setDestinatario('');
+      setValor('');
+      setContaDeposito('');
+
+    } catch (e) {
+      console.error('Erro ao realizar a transferência:', e);
+      toast.error('Erro ao realizar a transferência.');
+    } finally {
+      setLoading(false);
+    }
   }
+
 
   return (
     <>
+      <Loading show={loading} />
       <Title title="Realizar tranferência" />
 
       <Box sx={{ p: 3, bgcolor: '#ffffff' }}>
@@ -101,12 +126,17 @@ export default function PageTransferir() {
         >
           Qual valor você deseja transferir?
         </Typography>
-        <TextField
-          fullWidth
-          variant="standard"
+        <NumericFormat
           placeholder="R$"
+          size="small"
+          fullWidth
+          customInput={TextField}
           value={valor}
-          onChange={(e) => setValor(e.target.value)}
+          prefix="R$ "
+          thousandSeparator="."
+          decimalSeparator=","
+          onValueChange={(values) => setValor(values.value)}
+          sx={{ mb: 4 }}
           slotProps={{
             input: {
               disableUnderline: false,
@@ -115,8 +145,8 @@ export default function PageTransferir() {
               color: 'error',
             },
           }}
-          sx={{ mb: 4 }}
         />
+
 
         <Box sx={{ mb: 4, width: '100%' }}>
           <Typography sx={{ mb: 1, fontWeight: 'bold' }}>
