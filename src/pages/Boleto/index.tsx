@@ -2,11 +2,18 @@ import Title from '@components/Title';
 import { Box, TextField, Typography } from '@mui/material';
 import CButton from '@components/CButton';
 import { useState } from 'react';
+import { useMutationPostExtrato, useQueryGetExtrato } from '@hooks/useQueryExtrato';
+import { Slide, toast } from 'react-toastify';
+import { Loading } from '@components/Loading';
+import { NumericFormat } from 'react-number-format';
 
 export default function PageBoleto() {
   const [conta, setConta] = useState('');
   const [descricao, setDescricao] = useState('');
   const [valor, setValor] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { data } = useQueryGetExtrato()
+  const postMutation = useMutationPostExtrato()
 
   function handleConta(contaSelecionada: string) {
     setConta(contaSelecionada);
@@ -14,31 +21,26 @@ export default function PageBoleto() {
 
   async function handleConcluir() {
     if (!descricao || !valor || !conta) {
-      alert('Preencha todos os campos e selecione a conta.');
+      toast.warning('Preencha todos os campos e selecione a conta.');
       return;
     }
 
     const valorNumerico = Number(valor.replace(',', '.').replace('R$', '').trim());
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
-      alert('Digite um valor válido para o boleto.');
+      toast.warning('Digite um valor válido para o boleto.');
       return;
     }
 
-    // Busca o extrato para calcular o saldo da conta selecionada
-    const res = await fetch('http://localhost:3001/extrato');
-    const extrato = await res.json();
-    const saldoConta = extrato
-      .filter((item: any) =>
-        // Se o item tem campo conta, filtra normalmente. Se não tem, considera para todas as contas.
-        !item.conta || item.conta === conta
-      )
+
+    const saldoConta = data?.filter((item: any) => !item.conta || item.conta === conta
+    )
       .reduce((acc: number, item: any) => acc + Number(item.valor), 0);
 
-    const saldoAjustado = Number(saldoConta.toFixed(2));
+    const saldoAjustado = Number(saldoConta?.toFixed(2));
     const valorAjustado = Number(valorNumerico.toFixed(2));
 
     if (saldoAjustado < valorAjustado) {
-      alert('Saldo insuficiente para pagar o boleto.');
+      toast.warning('Saldo insuficiente para pagar o boleto.');
       return;
     }
 
@@ -49,30 +51,47 @@ export default function PageBoleto() {
           ? 'Conta Poupança'
           : conta;
 
-    const novoItem = {
-      tipo: `Boleto (${contaLabel})`,
-      descricao,
-      horario: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-      valor: -Math.abs(valorNumerico),
-      icone: 'LanguageIcon',
-      data: new Date().toISOString().slice(0, 10),
-      conta,
-    };
+    try {
+      setLoading(true);
+      await postMutation.mutateAsync({
+        values: {
+          tipo: `Boleto (${contaLabel})`,
+          descricao,
+          horario: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          valor: -Math.abs(valorNumerico),
+          icone: 'LanguageIcon',
+          data: new Date().toISOString().slice(0, 10),
+          conta,
+        }
+      });
 
-    await fetch('http://localhost:3001/extrato', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(novoItem),
-    });
+      toast.success('Boleto pago com sucesso!', {
+        position: 'top-right',
+        autoClose: 9000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide,
+      });
 
-    alert('Boleto pago com sucesso!');
-    setDescricao('');
-    setValor('');
-    setConta('');
+      setDescricao('');
+      setValor('');
+      setConta('');
+
+    } catch (e) {
+      console.error('Erro ao realizar a transferência:', e);
+      toast.error('Erro ao realizar a transferência.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <>
+      <Loading show={loading} />
       <Title title="Pagar Boleto" />
 
       <Box sx={{ p: 3, bgcolor: '#ffffff' }}>
@@ -104,12 +123,19 @@ export default function PageBoleto() {
         >
           Qual valor do boleto?
         </Typography>
-        <TextField
-          fullWidth
-          variant="standard"
+
+        <NumericFormat
           placeholder="R$"
+          size="small"
+          fullWidth
+          variant='standard'
+          customInput={TextField}
           value={valor}
-          onChange={(e) => setValor(e.target.value)}
+          prefix="R$ "
+          thousandSeparator="."
+          decimalSeparator=","
+          onValueChange={(values) => setValor(values.value)}
+          sx={{ mb: 4 }}
           slotProps={{
             input: {
               disableUnderline: false,
@@ -118,7 +144,6 @@ export default function PageBoleto() {
               color: 'error',
             },
           }}
-          sx={{ mb: 4 }}
         />
 
         <Box sx={{ mb: 4, width: '100%' }}>

@@ -130,6 +130,7 @@ export default function PageTransferir() {
           placeholder="R$"
           size="small"
           fullWidth
+          variant='standard'
           customInput={TextField}
           value={valor}
           prefix="R$ "

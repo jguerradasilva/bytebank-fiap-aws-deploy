@@ -11,16 +11,6 @@
       "conta": "conta-corrente"
     },
     {
-      "id": "4",
-      "tipo": "Compra Online",
-      "descricao": "Amazon",
-      "horario": "12:00",
-      "valor": -150,
-      "icone": "StorefrontIcon",
-      "data": "2025-05-15",
-      "conta": "conta-poupança"
-    },
-    {
       "id": "5",
       "tipo": "Compra Online",
       "descricao": "iFood",
@@ -95,7 +85,7 @@
       "tipo": "Boleto (Conta Poupança)",
       "descricao": "Conta de Luz",
       "horario": "11:12",
-      "valor": -100,
+      "valor": null,
       "icone": "LanguageIcon",
       "data": "2025-05-24",
       "conta": "conta-poupança"
@@ -135,7 +125,7 @@
       "tipo": "Boleto (Conta Corrente)",
       "descricao": "Xbox Game Pass",
       "horario": "11:54",
-      "valor": -1,
+      "valor": 90,
       "icone": "LanguageIcon",
       "data": "2025-05-24",
       "conta": "conta-corrente"
@@ -145,19 +135,49 @@
       "tipo": "Transferência (Conta Corrente)",
       "descricao": "Teste",
       "horario": "11:54",
-      "valor": -270.82,
+      "valor": -2322,
       "icone": "LanguageIcon",
       "data": "2025-05-24",
       "conta": "conta-corrente"
     },
     {
-      "id": "3acc",
-      "tipo": "Depósito",
-      "descricao": "Conta Corrente",
-      "horario": "21:56",
-      "valor": 343,
-      "icone": "AttachMoneyIcon",
-      "data": "2025-07-13",
+      "id": "ffb2",
+      "tipo": "Transferência (Conta Corrente)",
+      "descricao": "sasdf",
+      "horario": "17:24",
+      "valor": -0.82,
+      "icone": "LanguageIcon",
+      "data": "2025-07-15",
+      "conta": "conta-corrente"
+    },
+    {
+      "id": "e171",
+      "tipo": "Transferência (Conta Corrente)",
+      "descricao": "felipe",
+      "horario": "18:11",
+      "valor": -88,
+      "icone": "LanguageIcon",
+      "data": "2025-07-15",
+      "conta": "conta-corrente"
+    },
+    {
+      "id": "a147",
+      "tipo": "Transferência (Conta Corrente)",
+      "descricao": "teste",
+      "horario": "18:11",
+      "valor": -1000,
+      "icone": "LanguageIcon",
+      "data": "2025-07-15",
+      "conta": "conta-corrente"
+    },
+    {
+      "id": "8b04",
+      "tipo": "Transferência (Conta Corrente)",
+      "descricao": "teste 2",
+      "horario": "18:12",
+      "valor": -150,
+      "icone": "LanguageIcon",
+      "data": "2025-07-15",
       "conta": "conta-corrente"
     }
   ]
