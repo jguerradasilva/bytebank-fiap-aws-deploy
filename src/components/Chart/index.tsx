@@ -56,7 +56,7 @@ export default function ChartView() {
   return (
     <div style={{ width: '100%', height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {dados.length === 0 ? (
-        <p style={{ color: '#999' }}>Nenhum gasto encontrado para exibir no gráfico.</p>
+        <p style={{ color: '#999' }}>Nenhum movimento encontrado para exibir no gráfico.</p>
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={dados} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
