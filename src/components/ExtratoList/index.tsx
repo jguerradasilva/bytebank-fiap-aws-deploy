@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   List,
   ListItem,
@@ -28,6 +28,9 @@ import { formatarValor } from '@utils/formataValor';
 import { getIconComponent } from '@utils/getIconComponent';
 import { Loading } from '@components/Loading';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@store/store';
+import { isHoje, isNosUltimos7Dias, isOntem } from '@utils/dataUtils';
 
 export default function ExtratoList() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -37,7 +40,34 @@ export default function ExtratoList() {
   const updateMutate = useMutationUpdateExtrato();
   const deleteMutate = useMutationDeleteExtrato();
 
-  const grupos = agruparPorData(data as Extrato[]);
+  const filtro = useSelector((state: RootState) => state.extratoFilter.filtroData);
+  const busca = useSelector((state: RootState) => state.extratoFilter.filtroBusca.toLowerCase());
+
+  const dataFiltrada = useMemo(() => {
+    if (!data) return [];
+
+    return data
+      .filter((item) => {
+        switch (filtro) {
+          case 'hoje':
+            return isHoje(item.data);
+          case 'ontem':
+            return isOntem(item.data);
+          case 'ultimos7dias':
+            return isNosUltimos7Dias(item.data);
+          default:
+            return true;
+        }
+      })
+      .filter((item) => {
+        if (!busca) return true;
+
+        const texto = `${item.tipo} ${item.descricao} ${item.valor} ${item.data}`.toLowerCase();
+        return texto.includes(busca);
+      });
+  }, [data, filtro, busca]);
+
+  const grupos = agruparPorData(dataFiltrada);
 
   const datasOrdenadas = grupos
     ? Object.keys(grupos).sort((a, b) => {
@@ -64,7 +94,6 @@ export default function ExtratoList() {
     const valorNumber = Number(valorSanitizado);
 
     if (isNaN(valorNumber)) {
-      console.log('Valor inválido:', valorSanitizado);
       toast.error('Valor inválido!');
       return;
     }
@@ -134,7 +163,6 @@ export default function ExtratoList() {
       setLoading(false);
     }
   }
-
 
   function handleCancel() {
     setEditandoId(null);
@@ -289,6 +317,20 @@ export default function ExtratoList() {
                 })}
             </React.Fragment>
           ))}
+          {datasOrdenadas.length === 0 && (
+            <Typography
+              variant="body1"
+              sx={{
+                width: '100%',
+                textAlign: 'center',
+                mt: 4,
+                color: 'text.secondary',
+                fontStyle: 'italic',
+              }}
+            >
+              Nenhum resultado encontrado. 
+            </Typography>
+          )}
         </List>
       </Box>
     </>

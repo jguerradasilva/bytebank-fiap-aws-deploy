@@ -14,8 +14,6 @@ export default function Balance() {
     setShowBalance(!showedBalance);
   }
 
-  console.log(data);
-
   const totalCorrente = useMemo(() => {
     if (!data) return null;
 
