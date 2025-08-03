@@ -9,7 +9,7 @@ Este projeto foi desenvolvido pelos alunos:
 
 Matriculados na turma 3FRNT da Pós Graduação em Front-end Engeniering da FIAP.
 
-O Tech Bank App é uma aplicação bancária digital desenvolvida em [Next.js](https://nextjs.org) com Material UI, simulando funcionalidades de uma fintech. O projeto permite visualizar saldo, extrato, realizar depósitos, transferências, pagamentos de boletos e acessar outros serviços de uma conta bancária.
+O Tech Bank App é uma aplicação bancária digital desenvolvida em [React](https://react.dev) com Material UI, simulando funcionalidades de uma fintech. O projeto permite visualizar saldo, extrato, realizar depósitos, transferências, pagamentos de boletos e acessar outros serviços de uma conta bancária.
 Decidimos também reimaginar em alguns pontos o layout proposto ara o projeto, que pode ser encontrato nesse projeto do [Figma](https://www.figma.com/design/06sUi5crvAO4JuQHdGkdo2/Tech-Challenge?node-id=0-1&p=f&t=GN8a2pifAUeCwBl0-0)
 
 ## Funcionalidades
@@ -20,6 +20,8 @@ Decidimos também reimaginar em alguns pontos o layout proposto ara o projeto, q
 - Depósito em conta corrente ou poupança
 - Transferência entre contas
 - Pagamento de boletos
+- Gráfico com movimentações diárias
+- Filtros na aba de extrato
 - Listagem de serviços adicionais
 - Interface responsiva e moderna
 
@@ -42,7 +44,7 @@ Decidimos também reimaginar em alguns pontos o layout proposto ara o projeto, q
    json-server --watch json-server/db.json --port 3001
    ```
 
-3. **Inicie o servidor de desenvolvimento Next.js:**
+3. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
@@ -73,12 +75,20 @@ Este projeto utiliza o [Storybook](https://storybook.js.org/) para documentar e 
 
 ## Estrutura do Projeto
 
-- `src/pages/` — Páginas principais (dashboard, extrato, depósito, etc)
-- `src/components/` — Componentes reutilizáveis da interface
-- `src/assets/` — Imagens e ícones
-- `src/utils/` — Utilitários e constantes
-- `json-server/db.json` — Base de dados simulada para extratos e operações financeiras
-- `src/stories` - Documentação visual dos componentes do projeto
+src/
+├─ assets/         # Imagens e ícones
+├─ components/     # Componentes reutilizáveis da interface
+├─ config/         # Configurações e variáveis de ambiente
+├─ hooks/          # Ganchos para consultas de dados
+├─ pages/          # Páginas principais (dashboard, extrato, etc)
+├─ routes/         # Definição de rotas do sistema
+├─ services/       # Camada de serviço (APIs, integrações)
+├─ store/          # Gerenciamento de estado (Redux)
+├─ types/          # Tipagens TypeScript
+├─ utils/          # Funções utilitárias e constantes
+├─ stories/        # Documentação visual de componentes
+json-server/
+└─ db.json         # Base de dados mockada (extratos e operações)
 
 ## Observações
 
