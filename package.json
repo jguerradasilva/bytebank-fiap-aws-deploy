@@ -9,7 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "docker:dev": "docker-compose up app-dev",
+    "docker:prod": "docker-compose up app-prod",
+    "docker:build": "docker build -t bytebank-app .",
+    "deploy:aws": "cd aws && deploy.bat production us-east-1",
+    "deploy:infrastructure": "aws cloudformation create-stack --stack-name bytebank-infrastructure --template-body file://aws/cloudformation.yml --parameters ParameterKey=Environment,ParameterValue=production --capabilities CAPABILITY_IAM --region us-east-1"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

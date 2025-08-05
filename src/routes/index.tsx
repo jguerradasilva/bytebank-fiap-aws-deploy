@@ -5,13 +5,15 @@ import PageExtrato from "@pages/Extrato";
 import { Layout } from "@pages/Layout";
 import PageNotFound from "@pages/NotFound";
 import PageTransferir from "@pages/Transferir";
-import { Route, Routes } from "react-router";
+import HealthCheck from "@pages/HealthCheck";
+import { Route, Routes } from "react-router-dom";
 
 
 
 export default function Rotas() {
   return (
     <Routes>
+      <Route path="/health" element={<HealthCheck />} />
       <Route element={<Layout />} >
         <Route path="/" element={<PageDashboard />} />
         <Route path="/dashboard" element={<PageDashboard />} />

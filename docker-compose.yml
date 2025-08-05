@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # Frontend development
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - json-server
+
+  # Production frontend
+  app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - json-server
+
+  # JSON Server for API mock
+  json-server:
+    image: node:18-alpine
+    working_dir: /app
+    command: >
+      sh -c "npm install -g json-server &&
+             json-server --watch db.json --host 0.0.0.0 --port 3001"
+    volumes:
+      - ./json-server:/app
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+
+networks:
+  default:
+    name: bytebank-network
