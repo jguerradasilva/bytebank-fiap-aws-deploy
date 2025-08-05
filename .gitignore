@@ -22,6 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Arquivos de chaves SSH e EC2
+*.pem
+*.key
+ec2-user-data*.sh
+setup-*.sh
+*migration*.md
+*MERGE*.md
 **/db.json
 
 
