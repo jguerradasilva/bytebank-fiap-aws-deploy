@@ -3,7 +3,7 @@
 Este projeto foi desenvolvido pelos alunos:
  - Diego Minelli - RM362536
  - Jackson dos Santos - RM359898
- - Jefferson Guerra - RM363144
+ - Jerfeson Guerra - RM363144
  - Raul Ferreira - RM362993
  - Thomas Aguiar - RM363369
 
@@ -30,6 +30,8 @@ Decidimos também reimaginar em alguns pontos o layout proposto ara o projeto, q
 - [React](https://react.dev)
 - [Material UI](https://mui.com)
 - [json-server](https://github.com/typicode/json-server) (mock API)
+- [Docker](https://www.docker.com) (containerização)
+- [AWS ECS](https://aws.amazon.com/ecs/) (deploy em produção)
 
 ## Como rodar o projeto
 
@@ -73,6 +75,78 @@ Este projeto utiliza o [Storybook](https://storybook.js.org/) para documentar e 
    http://localhost:6006
    ```
 
+## Executar com Docker
+
+### Desenvolvimento
+```bash
+# Executar em modo desenvolvimento com hot reload
+npm run docker:dev
+```
+Acesse: [http://localhost:5173](http://localhost:5173)
+
+### Produção Local
+```bash
+# Executar build de produção
+npm run docker:prod
+```
+Acesse: [http://localhost](http://localhost)
+
+### Docker Compose (App + API)
+```bash
+# Executar aplicação completa com JSON Server
+docker-compose up
+```
+
+## Deploy na AWS
+
+### Pré-requisitos
+- Conta AWS ativa
+- AWS CLI instalado e configurado
+- Docker Desktop rodando
+
+### Configuração AWS CLI
+```bash
+# Instalar AWS CLI (Windows)
+winget install Amazon.AWSCLI
+
+# Configurar credenciais
+aws configure
+```
+
+### Deploy Automatizado
+
+1. **Criar infraestrutura (primeira vez):**
+   ```bash
+   npm run deploy:infrastructure
+   ```
+
+2. **Deploy da aplicação:**
+   ```bash
+   npm run deploy:aws
+   ```
+
+### Deploy Manual
+```bash
+# Executar script de deploy
+cd aws
+deploy.bat production us-east-1
+```
+
+### Health Check
+Após o deploy, verifique: `http://SEU_LOAD_BALANCER_DNS/health`
+
+### Comandos Úteis AWS
+```bash
+# Ver logs da aplicação
+aws logs tail /ecs/bytebank-app --follow
+
+# Status do serviço
+aws ecs describe-services --cluster bytebank-cluster --services bytebank-service
+
+# Reiniciar serviço
+aws ecs update-service --cluster bytebank-cluster --service bytebank-service --force-new-deployment
+```
+
 ## Estrutura do Projeto
 
 src/
@@ -87,6 +161,12 @@ src/
 ├─ types/          # Tipagens TypeScript
 ├─ utils/          # Funções utilitárias e constantes
 ├─ stories/        # Documentação visual de componentes
+aws/
+├─ cloudformation.yml    # Infraestrutura AWS
+├─ task-definition.json  # Configuração ECS
+├─ deploy.bat           # Script deploy Windows
+└─ deploy.sh            # Script deploy Linux
+.github/workflows/      # CI/CD automatizado
 json-server/
 └─ db.json         # Base de dados mockada (extratos e operações)
 
@@ -94,6 +174,21 @@ json-server/
 
 - O projeto utiliza o `json-server` para simular uma API REST. Certifique-se de deixá-lo rodando para que as operações funcionem corretamente.
 - Os dados não são persistidos em um banco real, apenas no arquivo `db.json`.
+- Para deploy em produção, consulte a documentação completa em `DEPLOY-AWS.md`.
+- O health check está disponível em `/health` para monitoramento.
+
+## Scripts Disponíveis
+
+```bash
+npm run dev                    # Servidor desenvolvimento
+npm run build                  # Build produção
+npm run preview               # Preview build local
+npm run storybook             # Documentação componentes
+npm run docker:dev            # Docker desenvolvimento
+npm run docker:prod           # Docker produção
+npm run deploy:infrastructure # Criar infraestrutura AWS
+npm run deploy:aws           # Deploy na AWS
+```
 
 ## Licença
 
