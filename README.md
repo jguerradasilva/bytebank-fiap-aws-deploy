@@ -294,8 +294,62 @@ npm run deploy:infrastructure # Criar infraestrutura AWS
 npm run deploy:aws           # Deploy na AWS
 ```
 
-## Licença
+## 🔐 Sistema de Autenticação
 
-Projeto desenvolvido para fins educacionais no Tech Challenge FIAP. Pós Graduação em Front-end Engeniering
-#   T e s t   C I / C D  
+O projeto agora inclui um sistema completo de autenticação integrado com a API DummyJSON.
+
+### Funcionalidades de Autenticação
+- Login modal integrado na página inicial
+- Proteção de rotas privadas 
+- Gerenciamento de estado com Redux Toolkit
+- Logout automático
+- Redirecionamento baseado no status de autenticação
+
+### Credenciais de Teste (DummyJSON)
+Para testar o sistema de autenticação, use uma das seguintes credenciais:
+
+```
+Usuário: emilys
+Senha: emilyspass
+
+Usuário: michaelw  
+Senha: michaelwpass
+
+Usuário: sophiab
+Senha: sophiabpass
+```
+
+### Como Usar
+1. Acesse a página inicial (`/home`)
+2. Clique em "Já tenho conta" na navbar
+3. Insira uma das credenciais de teste
+4. Será redirecionado para o dashboard após login bem-sucedido
+5. Use o botão de logout no header para sair
+
+### Configuração da API
+Adicione a seguinte variável ao seu arquivo `.env`:
+```env
+VITE_API_AUTH=https://dummyjson.com/auth/login
+```
+
+### Estrutura das Rotas
+- **Rotas Públicas**: `/home`, `/` (landing page com navbar e login)
+- **Rotas Privadas**: `/dashboard`, `/extrato`, `/deposito`, `/transferir`, `/boleto`
+- **Proteção**: Usuários não autenticados são redirecionados para `/home`
+
+## 📦 Dependências Adicionadas para Autenticação
+
+```json
+{
+  "formik": "^2.4.5",
+  "yup": "^1.4.0"
+}
+```
+
+Instale com:
+```bash
+npm install formik yup
+```
+#   T e s t   C I / C D 
+ 
  
