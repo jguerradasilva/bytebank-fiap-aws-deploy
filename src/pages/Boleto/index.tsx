@@ -6,6 +6,7 @@ import { useMutationPostExtrato, useQueryGetExtrato } from '@hooks/useQueryExtra
 import { Slide, toast } from 'react-toastify';
 import { Loading } from '@components/Loading';
 import { NumericFormat } from 'react-number-format';
+import type { Extrato } from '../../types/Extrato';
 
 export default function PageBoleto() {
   const [conta, setConta] = useState('');
@@ -32,9 +33,9 @@ export default function PageBoleto() {
     }
 
 
-    const saldoConta = data?.filter((item: any) => !item.conta || item.conta === conta
+    const saldoConta = data?.filter((item: Extrato) => !item.conta || item.conta === conta
     )
-      .reduce((acc: number, item: any) => acc + Number(item.valor), 0);
+      .reduce((acc: number, item: Extrato) => acc + Number(item.valor), 0);
 
     const saldoAjustado = Number(saldoConta?.toFixed(2));
     const valorAjustado = Number(valorNumerico.toFixed(2));

@@ -6,6 +6,7 @@ import { Slide, toast } from 'react-toastify';
 import { useMutationPostExtrato, useQueryGetExtrato } from '@hooks/useQueryExtrato';
 import { NumericFormat } from 'react-number-format';
 import { Loading } from '@components/Loading';
+import type { Extrato } from '../../types/Extrato';
 
 export default function PageTransferir() {
   const [contaDeposito, setContaDeposito] = useState('');
@@ -31,8 +32,8 @@ export default function PageTransferir() {
       return;
     }
 
-    const saldoConta = data?.filter((item: any) => item.conta === contaDeposito)
-      .reduce((acc: number, item: any) => acc + Number(item.valor), 0);
+    const saldoConta = data?.filter((item: Extrato) => item.conta === contaDeposito)
+      .reduce((acc: number, item: Extrato) => acc + Number(item.valor), 0);
 
     const saldoAjustado = Number(saldoConta?.toFixed(2));
     const valorAjustado = Number(valorNumerico.toFixed(2));
