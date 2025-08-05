@@ -8,6 +8,7 @@ import {
   IconButton,
   Box,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -28,9 +29,13 @@ import { formatarValor } from '@utils/formataValor';
 import { getIconComponent } from '@utils/getIconComponent';
 import { Loading } from '@components/Loading';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@store/store';
 import { isHoje, isNosUltimos7Dias, isOntem } from '@utils/dataUtils';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { toBase64 } from '@utils/toBase64';
+import { removePdf, uploadPdf } from '@store/UploadPDF';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 export default function ExtratoList() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -42,6 +47,43 @@ export default function ExtratoList() {
 
   const filtro = useSelector((state: RootState) => state.extratoFilter.filtroData);
   const busca = useSelector((state: RootState) => state.extratoFilter.filtroBusca.toLowerCase());
+
+  const dispatch = useDispatch();
+  const pdfs = useSelector((state: RootState) => state.pdf);
+
+  async function handlePdfUpload(event: React.ChangeEvent<HTMLInputElement>, extratoId: string) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      toast.error('Apenas arquivos PDF são permitidos.');
+      return;
+    }
+
+    const base64 = await toBase64(file);
+    dispatch(uploadPdf({ extratoId, pdfData: base64 }));
+    toast.success('PDF enviado com sucesso!');
+  }
+
+  function handlePdfDelete(extratoId: string) {
+    dispatch(removePdf({ extratoId }));
+    toast.success('PDF removido com sucesso!');
+  }
+
+  function handlePdfView(extratoId: string) {
+    const pdfData = pdfs[extratoId];
+    if (!pdfData) {
+      toast.error('Nenhum PDF disponível.');
+      return;
+    }
+    const win = window.open();
+    if (win) {
+      win.document.write(
+        `<iframe src="${pdfData}" frameborder="0" style="width:100%;height:100%;"></iframe>`
+      );
+    }
+  }
+
 
   const dataFiltrada = useMemo(() => {
     if (!data) return [];
@@ -220,6 +262,7 @@ export default function ExtratoList() {
                             <IconButton
                               edge="end"
                               aria-label="save"
+                              disableRipple
                               sx={{ color: '#388e3c', mr: 2 }}
                               onClick={() => handleUpdate(item)}
                             >
@@ -227,6 +270,7 @@ export default function ExtratoList() {
                             </IconButton>
                             <IconButton
                               edge="end"
+                              disableRipple
                               aria-label="cancel"
                               sx={{ color: '#d32f2f' }}
                               onClick={handleCancel}
@@ -235,29 +279,63 @@ export default function ExtratoList() {
                             </IconButton>
                           </>
                         ) : (
-                          <>
-                            <IconButton
-                              edge="end"
-                              aria-label="edit"
-                              sx={{ color: '#000', mr: 2 }}
-                              onClick={() => handleEditClick(item)}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              sx={{ color: '#000' }}
-                              onClick={() => handleDelete(item)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
+
+                          <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Tooltip title='Editar extrato' placement='top' arrow>
+                              <IconButton
+                                edge="end"
+                                disableRipple
+                                aria-label="edit"
+                                sx={{ color: '#000' }}
+                                onClick={() => handleEditClick(item)}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title='Remover extrato' placement='top' arrow>
+                              <IconButton
+                                edge="end"
+                                disableRipple
+                                aria-label="delete"
+                                sx={{ color: '#000' }}
+                                onClick={() => handleDelete(item)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title='Enviar comprovante' placement='top' arrow>
+                              <IconButton disabled={!!pdfs[item.id]} disableRipple component="label" sx={{ color: '#000' }}>
+                                <UploadFileIcon />
+                                <input
+                                  type="file"
+                                  accept="application/pdf"
+                                  hidden
+                                  onChange={(e) => handlePdfUpload(e, item.id)}
+                                />
+                              </IconButton>
+                            </Tooltip>
+
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                              {pdfs[item.id] && (
+                                <Tooltip title='Visualizar comprovante' placement='top' arrow>
+
+                                  <IconButton sx={{ color: '#000' }} disableRipple onClick={() => handlePdfView(item.id)}>
+                                    <PictureAsPdfIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+
+                              {pdfs[item.id] && (
+                                <Tooltip title='Remover comprovante' arrow>
+                                  <IconButton sx={{ color: '#d32f2f' }} disableRipple onClick={() => handlePdfDelete(item.id)}>
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </Box>
+                          </Box>
                         )
                       }
-                      sx={{
-                        flexWrap: 'wrap',
-                      }}
                     >
                       <ListItemAvatar sx={{ mr: 2 }}>
                         <ButtonServices
@@ -296,7 +374,7 @@ export default function ExtratoList() {
                               decimalSeparator=","
                               onValueChange={(values) => setNovoValor(values.value)
                               }
-                              sx={{ width: 90 }}
+                              sx={{ width: 200 }}
                             />
                           ) : (
                             formatarValor(item.valor)
@@ -328,7 +406,7 @@ export default function ExtratoList() {
                 fontStyle: 'italic',
               }}
             >
-              Nenhum resultado encontrado. 
+              Nenhum resultado encontrado.
             </Typography>
           )}
         </List>
