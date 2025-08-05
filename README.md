@@ -297,3 +297,5 @@ npm run deploy:aws           # Deploy na AWS
 ## Licença
 
 Projeto desenvolvido para fins educacionais no Tech Challenge FIAP. Pós Graduação em Front-end Engeniering
+#   T e s t   C I / C D  
+ 
