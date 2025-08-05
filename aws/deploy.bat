@@ -60,7 +60,7 @@ for /f "tokens=*" %%i in ('aws ecr get-login-password --region %AWS_REGION%') do
 
 REM Step 3: Build Docker image
 echo 🔨 Building Docker image...
-docker build -t %APP_NAME%:%ENVIRONMENT% .
+docker build -t %APP_NAME%:%ENVIRONMENT% ..
 docker tag %APP_NAME%:%ENVIRONMENT% %ECR_URI%:%ENVIRONMENT%
 docker tag %APP_NAME%:%ENVIRONMENT% %ECR_URI%:latest
 
@@ -71,10 +71,10 @@ docker push %ECR_URI%:latest
 
 REM Step 5: Update task definition
 echo 📝 Updating task definition...
-powershell -Command "(Get-Content aws\task-definition.json) -replace 'YOUR_ACCOUNT_ID', '%AWS_ACCOUNT_ID%' -replace 'YOUR_REGION', '%AWS_REGION%' | Set-Content aws\task-definition-updated.json"
+powershell -Command "(Get-Content task-definition.json) -replace 'YOUR_ACCOUNT_ID', '%AWS_ACCOUNT_ID%' -replace 'YOUR_REGION', '%AWS_REGION%' | Set-Content task-definition-updated.json"
 
 REM Register new task definition
-aws ecs register-task-definition --cli-input-json file://aws/task-definition-updated.json --region %AWS_REGION%
+aws ecs register-task-definition --cli-input-json file://task-definition-updated.json --region %AWS_REGION%
 
 REM Step 6: Update ECS service
 echo 🔄 Updating ECS service...
