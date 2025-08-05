@@ -13,7 +13,7 @@ RUN npm ci
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN npx vite build --config vite.config.production.ts
 
 # Production stage
 FROM nginx:alpine
