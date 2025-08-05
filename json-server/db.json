@@ -5,7 +5,7 @@
       "tipo": "Pagamento",
       "descricao": "Cartão de Crédito",
       "horario": "08:12",
-      "valor": -200,
+      "valor": -2002,
       "icone": "CreditCardIcon",
       "data": "2025-07-30",
       "conta": "cartao-credito"
@@ -205,7 +205,7 @@
       "tipo": "Depósito",
       "descricao": "Conta Poupança",
       "horario": "10:28",
-      "valor": 50,
+      "valor": 5044,
       "icone": "AttachMoneyIcon",
       "data": "2025-07-30",
       "conta": "conta-poupança"
