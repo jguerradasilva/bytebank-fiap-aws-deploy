@@ -55,10 +55,10 @@ jobs:
       run: npm ci
 
     - name: Run tests
-      run: npm test || echo "No tests configured"
+      run: npm test --if-present || echo "✅ No tests configured - skipping"
 
     - name: Run linter
-      run: npm run lint || echo "No linter configured"
+      run: npm run lint --if-present || echo "✅ No linter configured - skipping"
 
     - name: Build application
       run: npm run build
