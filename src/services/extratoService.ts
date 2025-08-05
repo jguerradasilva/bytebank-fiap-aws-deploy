@@ -4,7 +4,7 @@ import axios from 'axios';
 import type { Extrato } from 'src/types/Extrato';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || "",
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 export async function getExtrato(): Promise<Extrato[]> {
