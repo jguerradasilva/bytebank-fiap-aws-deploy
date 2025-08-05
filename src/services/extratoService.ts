@@ -19,7 +19,6 @@ export async function postExtrato(
   return response.data;
 }
 
-
 export async function updateExtrato(
   id: string,
   valor: number

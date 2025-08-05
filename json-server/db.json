@@ -409,6 +409,36 @@
       "icone": "ReceiptIcon",
       "data": "2025-07-21",
       "conta": "cartao-credito"
+    },
+    {
+      "id": "1282",
+      "tipo": "Depósito",
+      "descricao": "Conta Corrente",
+      "horario": "10:34",
+      "valor": 5000,
+      "icone": "AttachMoneyIcon",
+      "data": "2025-08-05",
+      "conta": "conta-corrente"
+    },
+    {
+      "id": "e1f1",
+      "tipo": "Depósito",
+      "descricao": "Conta Poupança",
+      "horario": "10:34",
+      "valor": 5000,
+      "icone": "AttachMoneyIcon",
+      "data": "2025-08-05",
+      "conta": "conta-poupança"
+    },
+    {
+      "id": "c2ec",
+      "tipo": "Boleto (Conta Corrente)",
+      "descricao": "Conta de Luz",
+      "horario": "10:35",
+      "valor": -1000,
+      "icone": "LanguageIcon",
+      "data": "2025-08-05",
+      "conta": "conta-corrente"
     }
   ]
 }
