@@ -97,12 +97,94 @@ Acesse: [http://localhost](http://localhost)
 docker-compose up
 ```
 
-## Deploy na AWS
+## Deploy na AWS com ECS Fargate
+
+### Aplicação em Produção
+- **Status:** ✅ ATIVO e FUNCIONANDO
+- **Plataforma:** AWS ECS Fargate
+- **IP Público:** `34.204.75.66`
+- **URL de Acesso:** http://34.204.75.66
+- **API Endpoint:** http://34.204.75.66/api/extrato
+
+### Arquitetura AWS
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   ECS Cluster   │ ➜  │  Fargate Task   │ ➜  │   Application   │
+│ bytebank-cluster│    │  CPU: 0.25 vCPU │    │ Frontend + API  │
+│                 │    │  RAM: 0.5 GB    │    │ Port 80 Public  │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+### Especificações Técnicas
+- **Compute:** AWS Fargate (Serverless)
+- **CPU:** 0.25 vCPU
+- **Memória:** 0.5 GB RAM
+- **Networking:** VPC pública com IP estático
+- **Container:** Docker multi-stage (nginx + Node.js)
+- **Health Check:** Endpoint `/health` com monitoramento
+
+### Custos de Operação
+| Recurso | Especificação | Custo Mensal |
+|---------|---------------|--------------|
+| Fargate vCPU | 0.25 vCPU | $7.39 |
+| Fargate RAM | 0.5 GB | $1.62 |
+| Data Transfer | ~1GB/mês | $0.09 |
+| **TOTAL** | | **$9.01/mês** |
+
+### Componentes AWS Implementados
+
+**ECS (Elastic Container Service)**
+- Cluster: `bytebank-cluster`
+- Service: `bytebank-service` (1 instância)
+- Task Definition: `bytebank-app:9` (versão atual)
+- Launch Type: Fargate (serverless)
+
+**ECR (Elastic Container Registry)**
+- Repository: `bytebank-app`
+- Image: Multi-stage Docker build
+- Tagging: `latest` (produção)
+
+**VPC & Networking**
+- Subnets: Públicas em múltiplas AZs
+- Security Groups: Portas 80, 443 abertas
+- IP Público: Atribuído automaticamente
+
+### Containerização
+
+**Dockerfile Multi-Stage**
+```dockerfile
+# Stage 1: Build React App
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npx vite build
+
+# Stage 2: Production (nginx + Node.js)
+FROM nginx:alpine
+RUN apk add --no-cache nodejs npm
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/api-server.js /app/
+COPY --from=build /app/json-server /app/json-server
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY startup.sh /app/startup.sh
+EXPOSE 80
+CMD ["/app/startup.sh"]
+```
+
+**Arquitetura do Container**
+- Frontend: React app servido pelo nginx
+- Backend: Express.js API na porta 3001
+- Proxy: nginx reverse proxy (80 → 3001)
+- Dados: JSON local persistente
 
 ### Pré-requisitos
 - Conta AWS ativa
 - AWS CLI instalado e configurado
 - Docker Desktop rodando
+- Credenciais IAM com permissões ECS/ECR
 
 ### Configuração AWS CLI
 ```bash
@@ -113,39 +195,61 @@ winget install Amazon.AWSCLI
 aws configure
 ```
 
-### Deploy Automatizado
-
-1. **Criar infraestrutura (primeira vez):**
-   ```bash
-   npm run deploy:infrastructure
-   ```
-
-2. **Deploy da aplicação:**
-   ```bash
-   npm run deploy:aws
-   ```
-
-### Deploy Manual
+### Deploy em Produção
 ```bash
-# Executar script de deploy
+# 1. Build e push da imagem
+npm run docker:build
+docker tag bytebank-app:latest 307987836348.dkr.ecr.us-east-1.amazonaws.com/bytebank-app:latest
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 307987836348.dkr.ecr.us-east-1.amazonaws.com
+docker push 307987836348.dkr.ecr.us-east-1.amazonaws.com/bytebank-app:latest
+
+# 2. Atualizar serviço ECS
+aws ecs update-service --cluster bytebank-cluster --service bytebank-service --force-new-deployment
+```
+
+### Deploy Automatizado
+```bash
+# Script completo de deploy
 cd aws
 deploy.bat production us-east-1
 ```
 
 ### Health Check
-Após o deploy, verifique: `http://SEU_LOAD_BALANCER_DNS/health`
+Após o deploy, verifique: `http://34.204.75.66/health`
 
-### Comandos Úteis AWS
+### Monitoramento e Logs
 ```bash
-# Ver logs da aplicação
-aws logs tail /ecs/bytebank-app --follow
-
 # Status do serviço
 aws ecs describe-services --cluster bytebank-cluster --services bytebank-service
 
-# Reiniciar serviço
+# Logs da aplicação
+aws logs tail /ecs/bytebank-app --follow --region us-east-1
+
+# Tasks em execução
+aws ecs list-tasks --cluster bytebank-cluster --service-name bytebank-service
+
+# Reiniciar serviço (zero downtime)
 aws ecs update-service --cluster bytebank-cluster --service bytebank-service --force-new-deployment
 ```
+
+### DNS Gratuito com Duck DNS
+Para configurar um domínio gratuito:
+
+1. **Acesse:** https://www.duckdns.org
+2. **Login:** com Google, GitHub ou Twitter
+3. **Configure:**
+   - subdomain: `bytebank`
+   - ip: `34.204.75.66`
+4. **URLs funcionais:**
+   - http://bytebank.duckdns.org
+   - http://bytebank.duckdns.org/api/extrato
+
+### Vantagens do Fargate
+- Serverless: Sem servidores para gerenciar
+- Auto-scaling: Escalabilidade automática
+- Alta disponibilidade: Multi-AZ por padrão
+- Segurança: Isolamento de containers
+- Pay-per-use: Pagamento por uso real
 
 ## Estrutura do Projeto
 
