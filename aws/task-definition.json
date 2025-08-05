@@ -32,11 +32,11 @@
         },
         {
           "name": "VITE_BASE_URL",
-          "value": "http://localhost:3001"
+          "value": ""
         },
         {
           "name": "VITE_EP_EXTRATO", 
-          "value": "/extrato"
+          "value": "/api/extrato"
         },
         {
           "name": "VITE_API_AUTH",

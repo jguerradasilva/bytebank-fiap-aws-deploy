@@ -13,8 +13,8 @@ RUN npm ci
 COPY . .
 
 # Set build-time environment variables
-ARG VITE_BASE_URL=http://localhost:3001
-ARG VITE_EP_EXTRATO=/extrato
+ARG VITE_BASE_URL=""
+ARG VITE_EP_EXTRATO="/api/extrato"
 ARG VITE_API_AUTH=https://dummyjson.com/auth/login
 
 ENV VITE_BASE_URL=$VITE_BASE_URL
