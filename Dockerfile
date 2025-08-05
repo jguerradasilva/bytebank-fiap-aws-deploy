@@ -37,11 +37,12 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Create startup script
-RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'node /app/api-server.js &' >> /start.sh && \
-    echo 'nginx -g "daemon off;"' >> /start.sh && \
-    chmod +x /start.sh
+# Copy startup script
+COPY startup.sh /start.sh
+RUN chmod +x /start.sh
+
+# Install curl for health checks
+RUN apk add --no-cache curl
 
 # Expose port
 EXPOSE 80
