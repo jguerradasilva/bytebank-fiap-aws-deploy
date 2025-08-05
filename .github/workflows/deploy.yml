@@ -1,14 +1,23 @@
 name: Deploy to AWS ECS
 
 on:
+  workflow_dispatch:  # Deploy manual apenas
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
   push:
     branches:
       - main
       - master
-  pull_request:
-    branches:
-      - main
-      - master
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
 
 env:
   AWS_REGION: us-east-1
@@ -49,6 +58,7 @@ jobs:
     name: Deploy to AWS
     runs-on: ubuntu-latest
     needs: test
+    environment: production  # Requer aprovação
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
 
     steps:

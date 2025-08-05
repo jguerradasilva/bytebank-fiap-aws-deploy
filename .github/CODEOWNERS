@@ -1,0 +1,14 @@
+# CODEOWNERS - Define quem pode aprovar mudanças
+
+# Todas as mudanças precisam de aprovação do owner
+* @jguerradasilva
+
+# Deploy e infraestrutura AWS - apenas owner
+.github/workflows/ @jguerradasilva
+aws/ @jguerradasilva
+Dockerfile @jguerradasilva
+docker-compose.yml @jguerradasilva
+
+# Arquivos de configuração críticos
+package.json @jguerradasilva
+package-lock.json @jguerradasilva
