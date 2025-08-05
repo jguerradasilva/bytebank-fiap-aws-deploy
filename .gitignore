@@ -27,9 +27,7 @@ dist-ssr
 *.pem
 *.key
 ec2-user-data*.sh
-setup-*.sh
 *migration*.md
-*MERGE*.md
 **/db.json
 
 
