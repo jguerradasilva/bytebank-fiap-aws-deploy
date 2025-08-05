@@ -8,7 +8,7 @@ export default function HealthCheck() {
       <h1 style={{ color: '#4CAF50' }}>ByteBank App - Health Check</h1>
       <p>Status: <strong style={{ color: '#4CAF50' }}>Healthy</strong></p>
       <p>Version: {import.meta.env.VITE_APP_VERSION || '1.0.0'}</p>
-      <p>Environment: {import.meta.env.NODE_ENV}</p>
+      <p>Environment: {import.meta.env.VITE_NODE_ENV || 'development'}</p>
       <p>Timestamp: {new Date().toISOString()}</p>
       <div style={{ 
         marginTop: '20px',
