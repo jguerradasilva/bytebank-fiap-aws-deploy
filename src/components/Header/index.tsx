@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link } from '@tanstack/react-router';
+import { Link } from 'react-router-dom';
 
 export default function HeaderComponent() {
   const user: string = 'Usuário';
@@ -26,7 +26,7 @@ export default function HeaderComponent() {
         <Typography variant="h5">Olá, {user}</Typography>
       </Box>
 
-      <Link to={'/'}>
+      <Link to='/'>
         <IconButton>
           <LogoutIcon sx={{ color: '#ffffff' }} />
         </IconButton>

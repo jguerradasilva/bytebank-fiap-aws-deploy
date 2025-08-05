@@ -1,6 +1,5 @@
 import ButtonServices from '@components/ButtonServices';
 import { Box } from '@mui/material';
-import { Link } from '@tanstack/react-router';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import CardComponents from '@components/CardComponents';
@@ -8,6 +7,7 @@ import CardPoupanca from '@components/CardPoupanca';
 import CardInvestimentos from '@components/CardInvestimentos';
 import CardServicos from '@components/CardServicos';
 import ChartView from '@components/Chart';
+import { Link } from 'react-router-dom';
 
 export default function PageDashboard() {
   return (

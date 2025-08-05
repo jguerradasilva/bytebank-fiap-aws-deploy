@@ -1,6 +1,6 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Link } from '@tanstack/react-router';
+import { Link } from 'react-router-dom';
 
 interface TitleProps {
   title: string;

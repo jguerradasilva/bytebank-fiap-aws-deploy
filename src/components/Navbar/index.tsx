@@ -14,7 +14,7 @@ import logo from '@assets/logo.png';
 
 import { useState } from 'react';
 import CButton from '@components/CButton';
-import { Link } from '@tanstack/react-router';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const theme = useTheme();

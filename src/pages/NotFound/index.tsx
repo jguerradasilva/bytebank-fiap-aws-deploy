@@ -2,8 +2,8 @@ import { Box, Button, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import './style.css';
 import img from '@assets/palha-white.png'
-import { Link } from '@tanstack/react-router';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 export default function PageNotFound() {
 
   useEffect(() => {
@@ -140,7 +140,7 @@ export default function PageNotFound() {
 
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
 
-            <Link to={'/dashboard'}>
+            <Link to='/dashboard'>
               <Button
                 color="primary"
                 variant="contained"

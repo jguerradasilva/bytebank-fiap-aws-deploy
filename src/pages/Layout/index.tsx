@@ -1,21 +1,14 @@
 import MainContainer from "@components/Container";
 import { Box } from "@mui/material";
-import { Outlet, useLocation } from "@tanstack/react-router";
+import { Outlet } from "react-router-dom";
 
 export function Layout() {
-  const location = useLocation()
-
-  const isPageHome = location.pathname === '/'
 
   return (
     <Box>
-      {isPageHome ? (
+      <MainContainer>
         <Outlet />
-      ) : (
-        <MainContainer>
-          <Outlet />
-        </MainContainer>
-      )}
+      </MainContainer>
     </Box>
   )
 }

@@ -3,8 +3,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import logoSmall from '@assets/logo_small_white.png';
 import { useMemo, useState } from 'react';
-import { Link } from '@tanstack/react-router';
 import { useQueryGetExtrato } from '@hooks/useQueryExtrato';
+import { Link } from 'react-router-dom';
 
 export default function Balance() {
   const [showedBalance, setShowBalance] = useState(false);
@@ -97,7 +97,7 @@ export default function Balance() {
           )}
         </Box>
 
-        <Link to="/extrato" className="">
+        <Link to="/extrato">
           <Typography
             sx={{
               color: 'white',
