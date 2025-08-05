@@ -1,10 +1,16 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link } from 'react-router-dom';
+import { logout } from '@store/Auth';
 
 export default function HeaderComponent() {
   const user: string = 'Usuário';
+
+  function handleLogout() {
+    sessionStorage.removeItem('token');
+    logout();
+    window.location.reload();
+  }
 
   return (
     <Box
@@ -26,11 +32,9 @@ export default function HeaderComponent() {
         <Typography variant="h5">Olá, {user}</Typography>
       </Box>
 
-      <Link to='/'>
-        <IconButton>
-          <LogoutIcon sx={{ color: '#ffffff' }} />
-        </IconButton>
-      </Link>
+      <IconButton onClick={handleLogout}>
+        <LogoutIcon sx={{ color: '#ffffff' }} />
+      </IconButton>
     </Box>
   );
 }

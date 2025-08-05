@@ -10,16 +10,20 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '@assets/logo.png';
 
-
-
 import { useState } from 'react';
 import CButton from '@components/CButton';
 import { Link } from 'react-router-dom';
+import { Login } from '@pages/Login';
 
 export default function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState(false);
+
+  function handleOpen() {
+    setOpen(true);
+  }
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -85,18 +89,19 @@ export default function Navbar() {
                 whiteSpace: 'nowrap',
               }}
             />
-            <Link to="/dashboard">
-              <CButton
-                text="Já tenho conta"
-                sx={{
-                  bgcolor: 'transparent',
-                  borderRadius: 1,
-                  border: '2px solid #236B7A',
-                  textTransform: 'none',
-                  whiteSpace: 'nowrap',
-                }}
-              />
-            </Link>
+            <Login open={open} onClose={() => setOpen(false)} />
+
+            <CButton
+              text="Já tenho conta"
+              sx={{
+                bgcolor: 'transparent',
+                borderRadius: 1,
+                border: '2px solid #236B7A',
+                textTransform: 'none',
+                whiteSpace: 'nowrap',
+              }}
+              onClick={handleOpen}
+            />
           </>
         )}
 
@@ -159,6 +164,7 @@ export default function Navbar() {
           </>
         )}
       </Box>
-    </Box >
+      {open && <Login onClose={() => setOpen(false)} open={open} />}
+    </Box>
   );
 }
