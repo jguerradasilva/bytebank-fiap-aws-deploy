@@ -14,9 +14,7 @@
     "build-storybook": "storybook build",
     "docker:dev": "docker-compose up app-dev",
     "docker:prod": "docker-compose up app-prod",
-    "docker:build": "docker build -t bytebank-app .",
-    "deploy:aws": "cd aws && deploy.bat production us-east-1",
-    "deploy:infrastructure": "aws cloudformation create-stack --stack-name bytebank-infrastructure --template-body file://aws/cloudformation.yml --parameters ParameterKey=Environment,ParameterValue=production --capabilities CAPABILITY_IAM --region us-east-1"
+    "docker:build": "docker build -t bytebank-app ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
