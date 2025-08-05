@@ -4,12 +4,12 @@
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
-  "executionRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/ecsTaskExecutionRole",
-  "taskRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/ecsTaskRole",
+  "executionRoleArn": "arn:aws:iam::307987836348:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::307987836348:role/ecsTaskRole",
   "containerDefinitions": [
     {
       "name": "bytebank-frontend",
-      "image": "YOUR_ACCOUNT_ID.dkr.ecr.YOUR_REGION.amazonaws.com/bytebank-app:latest",
+      "image": "307987836348.dkr.ecr.us-east-1.amazonaws.com/bytebank-repo:latest",
       "portMappings": [
         {
           "containerPort": 80,
@@ -21,7 +21,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/ecs/bytebank-app",
-          "awslogs-region": "YOUR_REGION",
+          "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
         }
       },
