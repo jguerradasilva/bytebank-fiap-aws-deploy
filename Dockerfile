@@ -12,6 +12,15 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Set build-time environment variables
+ARG VITE_BASE_URL=http://localhost:3001
+ARG VITE_EP_EXTRATO=/extrato
+ARG VITE_API_AUTH=https://dummyjson.com/auth/login
+
+ENV VITE_BASE_URL=$VITE_BASE_URL
+ENV VITE_EP_EXTRATO=$VITE_EP_EXTRATO
+ENV VITE_API_AUTH=$VITE_API_AUTH
+
 # Build the application with production config
 RUN npx vite build --config vite.config.production.ts
 

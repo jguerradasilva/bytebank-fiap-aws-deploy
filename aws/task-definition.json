@@ -29,6 +29,18 @@
         {
           "name": "NODE_ENV",
           "value": "production"
+        },
+        {
+          "name": "VITE_BASE_URL",
+          "value": "http://localhost:3001"
+        },
+        {
+          "name": "VITE_EP_EXTRATO", 
+          "value": "/extrato"
+        },
+        {
+          "name": "VITE_API_AUTH",
+          "value": "https://dummyjson.com/auth/login"
         }
       ],
       "healthCheck": {
