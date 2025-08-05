@@ -13,7 +13,7 @@ import PrivateRoute from '@utils/privateRoute';
 export default function Rotas() {
   return (
     <Routes>
-      <Route  element={<Layout />}>
+      <Route element={<Layout />}>
         <Route
           path="/dashboard"
           element={
