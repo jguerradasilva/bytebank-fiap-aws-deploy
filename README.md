@@ -102,9 +102,9 @@ docker-compose up
 ### Aplicação em Produção
 - **Status:** ✅ ATIVO e FUNCIONANDO
 - **Plataforma:** AWS ECS Fargate
-- **IP Público:** `34.204.75.66`
-- **URL de Acesso:** http://34.204.75.66
-- **API Endpoint:** http://34.204.75.66/api/extrato
+- **IP Público:** `35.153.161.237`
+- **URL de Acesso:** http://35.153.161.237
+- **API Endpoint:** http://35.153.161.237/api/extrato
 
 ### Arquitetura AWS
 
@@ -120,7 +120,7 @@ docker-compose up
 - **Compute:** AWS Fargate (Serverless)
 - **CPU:** 0.25 vCPU
 - **Memória:** 0.5 GB RAM
-- **Networking:** VPC pública com IP estático
+- **Networking:** VPC pública
 - **Container:** Docker multi-stage (nginx + Node.js)
 - **Health Check:** Endpoint `/health` com monitoramento
 
@@ -352,4 +352,5 @@ npm install formik yup
 ```
 #   T e s t   C I / C D 
  
+
  
