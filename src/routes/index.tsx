@@ -1,14 +1,13 @@
-import PageBoleto from '@pages/Boleto';
-import PageDashboard from '@pages/Dashboard';
-import PageDeposito from '@pages/Deposito';
-import PageExtrato from '@pages/Extrato';
-import PageHome from '@pages/Home';
-import { Layout } from '@pages/Layout';
-import PageNotFound from '@pages/NotFound';
-import PageTransferir from '@pages/Transferir';
+import PageBoleto from '@features/boleto/pages';
+import PageDashboard from '@features/dashboard/pages';
+import PageDeposito from '@features/deposito/pages';
+import PageExtrato from '@features/extrato/pages';
+import PageHome from '@features/home/pages';
+import { Layout } from '@features/common/pages/Layout';
+import PageNotFound from '@features/common/pages/NotFound';
+import PageTransferir from '@features/transferencia/pages';
 import { Navigate, Route, Routes } from 'react-router';
-import PublicRoute from './public.routes';
-import PrivateRoute from '@utils/privateRoute';
+import { PrivateRoute, PublicRoute } from '@shared/components';
 
 export default function Rotas() {
   return (
