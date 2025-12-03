@@ -9,13 +9,13 @@
 
 ---
 
-## 📋 Descrição
+## 📋 Description
 
-**ByteBank** é uma aplicação bancária digital moderna desenvolvida em **React 19** com **TypeScript** e **Material-UI**, simulando funcionalidades reais de uma fintech. O projeto apresenta uma interface responsiva e intuitiva para gerenciamento de operações bancárias, com autenticação segura e integração completa com infraestrutura **AWS ECS Fargate**.
+**ByteBank** is a modern digital banking application developed with **React 19**, **TypeScript**, and **Material-UI**, simulating real fintech functionalities. The project features a responsive and intuitive interface for banking operations management, with secure authentication and complete integration with **AWS ECS Fargate** infrastructure.
 
-A aplicação foi desenvolvida como projeto final da turma **3FRNT** da Pós-Graduação em **Front-end Engineering** da FIAP e está **em produção**, operando com alta disponibilidade através de containerização Docker e orquestração em nuvem.
+The application was developed as a final project for the **3FRNT** class of FIAP's **Front-end Engineering** Graduate Program and is **in production**, operating with high availability through Docker containerization and cloud orchestration.
 
-### 👥 Desenvolvido por
+### 👥 Developed by
 - **Diego Minelli** - RM362536
 - **Jackson dos Santos** - RM359898
 - **Jerfeson Guerra** - RM363144
@@ -24,49 +24,49 @@ A aplicação foi desenvolvida como projeto final da turma **3FRNT** da Pós-Gra
 
 ---
 
-## 🎯 Propósito do Projeto
+## 🎯 Project Purpose
 
-ByteBank foi desenvolvido para demonstrar competências em:
+ByteBank was developed to demonstrate competencies in:
 
-- Desenvolvimento **full-stack** de aplicações web modernas
-- Arquitetura de componentes **reutilizáveis** e bem estruturados
-- **Gerenciamento de estado** com Redux Toolkit
-- **Autenticação** e segurança em aplicações React
-- **Consumo de APIs** REST com React Query
-- Containerização com **Docker** e orquestração **AWS**
-- **Responsividade** e design responsivo com Material-UI
-- **Documentação de componentes** com Storybook
-- Integração **CI/CD** automatizada
-
----
-
-## ✨ Características Principais
-
-- 🏦 **Gerenciamento de Contas** - Visualização de saldo em conta corrente e poupança
-- 📊 **Extrato Detalhado** - Agrupamento inteligente por data com edição e exclusão
-- 💰 **Operações Bancárias** - Depósitos, transferências e pagamentos de boletos
-- 📈 **Gráficos Interativos** - Visualização de movimentações diárias em tempo real
-- 🔐 **Autenticação Segura** - Sistema de login integrado com validação
-- 🎨 **UI/UX Moderna** - Design responsivo com Material-UI v7
-- 📱 **Responsivo** - Otimizado para desktop, tablet e mobile
-- 🧩 **Componentes Documentados** - Documentação visual com Storybook
-- 🐳 **Containerizado** - Docker multi-stage para produção
-- ☁️ **Cloud Ready** - Deployado em AWS ECS Fargate com alta disponibilidade
+- Modern **full-stack** web application development
+- **Reusable** and well-structured component architecture
+- **State management** with Redux Toolkit
+- **Authentication** and security in React applications
+- **REST API consumption** with React Query
+- **Docker** containerization and **AWS** orchestration
+- **Responsiveness** and responsive design with Material-UI
+- **Component documentation** with Storybook
+- Automated **CI/CD** integration
 
 ---
 
-## 🏗️ Arquitetura & Especificações
+## ✨ Key Features
 
-### Stack Tecnológico
+- 🏦 **Account Management** - Balance view for checking and savings accounts
+- 📊 **Detailed Statement** - Smart grouping by date with editing and deletion
+- 💰 **Banking Operations** - Deposits, transfers, and bill payments
+- 📈 **Interactive Charts** - Real-time visualization of daily transactions
+- 🔐 **Secure Authentication** - Integrated login system with validation
+- 🎨 **Modern UI/UX** - Responsive design with Material-UI v7
+- 📱 **Responsive** - Optimized for desktop, tablet, and mobile
+- 🧩 **Documented Components** - Visual documentation with Storybook
+- 🐳 **Containerized** - Multi-stage Docker for production
+- ☁️ **Cloud Ready** - Deployed on AWS ECS Fargate with high availability
+
+---
+
+## 🏗️ Architecture & Specifications
+
+### Technology Stack
 
 **Frontend:**
 - React 19.1.0 - UI library
 - TypeScript 5.8.3 - Type safety
 - Vite 7.0.3 - Build tool (⚡ fast)
 - Material-UI 7.2.0 - Component library
-- Framer Motion - Animações suaves
+- Framer Motion - Smooth animations
 - React Query - State management & data fetching
-- Redux Toolkit - Gerenciamento global de estado
+- Redux Toolkit - Global state management
 
 **Backend & APIs:**
 - Express.js - API REST
@@ -82,34 +82,34 @@ ByteBank foi desenvolvido para demonstrar competências em:
 - TypeScript Compiler - Type checking
 
 **Cloud & Infrastructure:**
-- Docker - Containerização
-- AWS ECS Fargate - Orquestração serverless
+- Docker - Containerization
+- AWS ECS Fargate - Serverless orchestration
 - AWS ECR - Container registry
 - nginx - Reverse proxy
 
-### Estrutura de Pastas
+### Folder Structure
 
 ```
 bytebank-fiap-aws-deploy/
 ├─ src/
-│  ├─ components/          # Componentes reutilizáveis (Balance, Card*, etc)
-│  ├─ pages/               # Páginas principais (Dashboard, Extrato, etc)
-│  ├─ services/            # Camada de serviço (APIs, integrações)
-│  ├─ hooks/               # React Hooks customizados
+│  ├─ components/          # Reusable components (Balance, Card*, etc)
+│  ├─ pages/               # Main pages (Dashboard, Statement, etc)
+│  ├─ services/            # Service layer (APIs, integrations)
+│  ├─ hooks/               # Custom React Hooks
 │  ├─ store/               # Redux state management
-│  ├─ routes/              # Definição de rotas (públicas/privadas)
-│  ├─ types/               # Tipos TypeScript globais
-│  ├─ utils/               # Funções utilitárias
-│  ├─ styles/              # Estilos globais e theme
-│  ├─ config/              # Configurações (env, constantes)
+│  ├─ routes/              # Route definitions (public/private)
+│  ├─ types/               # Global TypeScript types
+│  ├─ utils/               # Utility functions
+│  ├─ styles/              # Global styles and theme
+│  ├─ config/              # Configurations (env, constants)
 │  ├─ stories/             # Storybook documentation
-│  ├─ assets/              # Imagens e ícones
+│  ├─ assets/              # Images and icons
 │  ├─ App.tsx              # Root component
 │  └─ main.tsx             # Entry point
 ├─ json-server/
 │  └─ db.json              # Mock database
 ├─ aws/
-│  ├─ cloudformation.yml   # Infraestrutura IaC
+│  ├─ cloudformation.yml   # IaC infrastructure
 │  ├─ task-definition.json # ECS task config
 │  └─ deploy.bat           # Deploy automation
 ├─ public/                 # Static assets
@@ -123,7 +123,7 @@ bytebank-fiap-aws-deploy/
 └─ README.md               # This file
 ```
 
-### Fluxo de Dados
+### Data Flow
 
 ```
 ┌──────────────┐
@@ -154,134 +154,134 @@ bytebank-fiap-aws-deploy/
 
 ---
 
-## 📦 Funcionalidades em Detalhes
+## 📦 Features in Detail
 
-### 1️⃣ Dashboard Bancário
-- Visualização de saldo em tempo real
-- Cards informativos (saldo, poupança, investimentos)
-- Gráficos de movimentação
-- Quick actions para operações frequentes
+### 1️⃣ Banking Dashboard
+- Real-time balance viewing
+- Informative cards (balance, savings, investments)
+- Transaction charts
+- Quick actions for frequent operations
 
-### 2️⃣ Extrato Inteligente
-- Lista de transações agrupada por data
-- Filtros avançados (período, tipo, valor)
-- Edição e exclusão de lançamentos
-- Busca e ordenação
-- Export de dados
+### 2️⃣ Smart Statement
+- Transaction list grouped by date
+- Advanced filters (period, type, amount)
+- Entry editing and deletion
+- Search and sorting
+- Data export
 
-### 3️⃣ Operações Bancárias
-- **Depósito** - Transferência para conta corrente/poupança
-- **Transferência** - Entre contas de mesmo titular
-- **Boleto** - Pagamento de contas e boletos
-- Validação de dados em tempo real
+### 3️⃣ Banking Operations
+- **Deposit** - Transfer to checking/savings account
+- **Transfer** - Between accounts of the same holder
+- **Bill Payment** - Account and bill payments
+- Real-time data validation
 
-### 4️⃣ Autenticação & Segurança
-- Login com validação DummyJSON
-- Proteção de rotas privadas
-- Tokens e sessões
-- Logout automático
-- Recuperação de senha
+### 4️⃣ Authentication & Security
+- Login with DummyJSON validation
+- Private route protection
+- Tokens and sessions
+- Automatic logout
+- Password recovery
 
-### 5️⃣ Componentes Reutilizáveis
-- `Balance` - Exibição de saldo
-- `CardComponents` - Cards genéricos
-- `ButtonServices` - Botões de serviços
-- `ExtratoList` - Listagem de transações
-- `Chart` - Gráficos interativos
-- `Input` - Campos de entrada validados
-- E mais 10+ componentes documentados
+### 5️⃣ Reusable Components
+- `Balance` - Balance display
+- `CardComponents` - Generic cards
+- `ButtonServices` - Service buttons
+- `ExtratoList` - Transaction listing
+- `Chart` - Interactive charts
+- `Input` - Validated input fields
+- Plus 10+ documented components
 
 ---
 
-## 🚀 Começando
+## 🚀 Getting Started
 
-### Pré-requisitos
-- Node.js 16+ ou 18+
-- npm ou yarn
-- Docker & Docker Compose (opcional)
-- AWS CLI (para deploy em produção)
+### Prerequisites
+- Node.js 16+ or 18+
+- npm or yarn
+- Docker & Docker Compose (optional)
+- AWS CLI (for production deployment)
 
-### Instalação Local
+### Local Installation
 
 ```bash
-# 1. Clone o repositório
+# 1. Clone the repository
 git clone https://github.com/jguerradasilva/bytebank-fiap-aws-deploy.git
 cd bytebank-fiap-aws-deploy
 
-# 2. Instale as dependências
+# 2. Install dependencies
 npm install
 
-# 3. Configure variáveis de ambiente
+# 3. Configure environment variables
 echo "VITE_API_AUTH=https://dummyjson.com/auth/login" > .env.local
 echo "VITE_API_URL=http://localhost:3001" >> .env.local
 ```
 
-### Desenvolvimento
+### Development
 
-#### Opção 1: Sem Docker (Desenvolvimento Local)
+#### Option 1: Without Docker (Local Development)
 
 ```bash
-# Terminal 1: Iniciar JSON Server (API mock)
+# Terminal 1: Start JSON Server (mock API)
 npm run dev:api
 
-# Terminal 2: Iniciar Vite dev server
+# Terminal 2: Start Vite dev server
 npm run dev
 
-# Terminal 3: Iniciar Storybook (opcional)
+# Terminal 3: Start Storybook (optional)
 npm run storybook
 ```
 
-Aplicação: http://localhost:5173
+Application: http://localhost:5173
 Storybook: http://localhost:6006
 
-#### Opção 2: Com Docker
+#### Option 2: With Docker
 
 ```bash
-# Desenvolvimento com hot reload
+# Development with hot reload
 npm run docker:dev
 
-# Acesse: http://localhost:5173
+# Access: http://localhost:5173
 ```
 
-#### Opção 3: Todos os Serviços com Docker Compose
+#### Option 3: All Services with Docker Compose
 
 ```bash
-# Aplicação + JSON Server + nginx
+# Application + JSON Server + nginx
 docker-compose up
 
-# Acesse: http://localhost
+# Access: http://localhost
 ```
 
-### Build & Produção
+### Build & Production
 
 ```bash
-# Build para produção
+# Build for production
 npm run build
 
-# Preview local do build
+# Local build preview
 npm run preview
 
-# Build Docker para produção
+# Docker build for production
 npm run docker:prod
 
-# Acesse: http://localhost
+# Access: http://localhost
 ```
 
 ---
 
-## 📚 Documentação de Componentes
+## 📚 Component Documentation
 
-Este projeto utiliza **Storybook** para documentação visual e interativa de componentes.
+This project uses **Storybook** for visual and interactive component documentation.
 
-### Visualizar Componentes
+### View Components
 
 ```bash
 npm run storybook
 ```
 
-Acesse: **http://localhost:6006**
+Access: **http://localhost:6006**
 
-Componentes documentados:
+Documented components:
 - Balance
 - ButtonServices
 - CardComponents
@@ -301,16 +301,16 @@ Componentes documentados:
 
 ---
 
-## ☁️ Deploy em Produção (AWS ECS Fargate)
+## ☁️ Production Deployment (AWS ECS Fargate)
 
-### Status Atual
-- ✅ **ATIVO E FUNCIONANDO**
-- 📍 **IP Público:** 35.153.161.237
+### Current Status
+- ✅ **ACTIVE AND RUNNING**
+- 📍 **Public IP:** 35.153.161.237
 - 🌐 **URL:** http://35.153.161.237
 - 🔗 **API:** http://35.153.161.237/api/extrato
-- 💰 **Custo:** ~$9/mês
+- 💰 **Cost:** ~$9/month
 
-### Arquitetura AWS
+### AWS Architecture
 
 ```
 Internet
@@ -342,22 +342,22 @@ Internet
 └──────────────────────────┘
 ```
 
-### Especificações
+### Specifications
 
-| Componente | Especificação | Custo |
-|-----------|---------------|-------|
-| Fargate vCPU | 0.25 vCPU | $7.39/mês |
-| Fargate RAM | 0.5 GB | $1.62/mês |
-| Data Transfer | ~1GB/mês | $0.09/mês |
-| **TOTAL** | | **~$9.00/mês** |
+| Component | Specification | Cost |
+|-----------|---------------|------|
+| Fargate vCPU | 0.25 vCPU | $7.39/month |
+| Fargate RAM | 0.5 GB | $1.62/month |
+| Data Transfer | ~1GB/month | $0.09/month |
+| **TOTAL** | | **~$9.00/month** |
 
-### Configuração AWS
+### AWS Configuration
 
 ```bash
-# 1. Configure credenciais AWS
+# 1. Configure AWS credentials
 aws configure
 
-# 2. Build e push da imagem
+# 2. Build and push image
 npm run docker:build
 docker tag bytebank-app:latest 307987836348.dkr.ecr.us-east-1.amazonaws.com/bytebank-app:latest
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 307987836348.dkr.ecr.us-east-1.amazonaws.com
@@ -367,111 +367,111 @@ docker push 307987836348.dkr.ecr.us-east-1.amazonaws.com/bytebank-app:latest
 aws ecs update-service --cluster bytebank-cluster --service bytebank-service --force-new-deployment
 ```
 
-### Monitoramento
+### Monitoring
 
 ```bash
-# Status do serviço
+# Service status
 aws ecs describe-services --cluster bytebank-cluster --services bytebank-service
 
-# Logs em tempo real
+# Real-time logs
 aws logs tail /ecs/bytebank-app --follow --region us-east-1
 
-# Tasks em execução
+# Running tasks
 aws ecs list-tasks --cluster bytebank-cluster --service-name bytebank-service
 
-# Reiniciar (zero downtime)
+# Restart (zero downtime)
 aws ecs update-service --cluster bytebank-cluster --service bytebank-service --force-new-deployment
 ```
 
 ### Health Check
 
 ```bash
-# Verificar saúde da aplicação
+# Check application health
 curl http://35.153.161.237/health
 ```
 
 ---
 
-## 🔐 Autenticação
+## 🔐 Authentication
 
-### Credenciais de Teste
+### Test Credentials
 
-Use qualquer uma destas credenciais para fazer login:
+Use any of these credentials to login:
 
-| Usuário | Senha |
+| Username | Password |
 |---------|-------|
 | emilys | emilyspass |
 | michaelw | michaelwpass |
 | sophiab | sophiabpass |
 
-### Fluxo de Autenticação
+### Authentication Flow
 
-1. Acesse http://localhost:5173
-2. Clique em "Já tenho conta" na navbar
-3. Insira credenciais de teste
-4. Login redirecionará para `/dashboard`
-5. Use logout no header para sair
+1. Access http://localhost:5173
+2. Click "Já tenho conta" in the navbar
+3. Enter test credentials
+4. Login will redirect to `/dashboard`
+5. Use logout in header to sign out
 
-### Tecnologias
+### Technologies
 
-- **DummyJSON** - API de autenticação
-- **Formik** - Gerenciamento de formulários
-- **Yup** - Validação de schemas
-- **Redux Toolkit** - Armazenamento de tokens
-- **React Router** - Proteção de rotas
+- **DummyJSON** - Authentication API
+- **Formik** - Form management
+- **Yup** - Schema validation
+- **Redux Toolkit** - Token storage
+- **React Router** - Route protection
 
 ---
 
-## 📋 Scripts Disponíveis
+## 📋 Available Scripts
 
 ```bash
-# Desenvolvimento
-npm run dev                    # Inicia Vite dev server
-npm run dev:api              # Inicia JSON Server
-npm run dev:full             # Inicia dev server + JSON Server
+# Development
+npm run dev                    # Start Vite dev server
+npm run dev:api              # Start JSON Server
+npm run dev:full             # Start dev server + JSON Server
 
 # Build & Preview
-npm run build                # Build para produção
-npm run preview              # Preview do build local
+npm run build                # Build for production
+npm run preview              # Preview local build
 
-# Documentação
-npm run storybook            # Inicia Storybook
-npm run build-storybook      # Build Storybook estático
+# Documentation
+npm run storybook            # Start Storybook
+npm run build-storybook      # Build static Storybook
 
 # Docker
-npm run docker:dev           # Desenvolvimento com Docker
-npm run docker:prod          # Produção com Docker
-npm run docker:build         # Build da imagem Docker
+npm run docker:dev           # Development with Docker
+npm run docker:prod          # Production with Docker
+npm run docker:build         # Build Docker image
 
-# Qualidade de Código
-npm run lint                 # Lint com ESLint
+# Code Quality
+npm run lint                 # Lint with ESLint
 
 # Deploy
-npm run deploy:infrastructure # Criar infraestrutura AWS
-npm run deploy:aws          # Deploy em produção
+npm run deploy:infrastructure # Create AWS infrastructure
+npm run deploy:aws          # Deploy to production
 ```
 
 ---
 
 ## 🐳 Docker
 
-### Desenvolvimento
+### Development
 
 ```bash
 npm run docker:dev
-# Acesse: http://localhost:5173
-# Hot reload ativado
+# Access: http://localhost:5173
+# Hot reload enabled
 ```
 
-### Produção
+### Production
 
 ```bash
 npm run docker:prod
-# Acesse: http://localhost
-# Otimizado e pronto para produção
+# Access: http://localhost
+# Optimized and production-ready
 ```
 
-### Docker Compose (Completo)
+### Docker Compose (Complete)
 
 ```bash
 docker-compose up
@@ -505,44 +505,44 @@ CMD ["/app/startup.sh"]
 
 ## 🛠️ Troubleshooting
 
-### Porta 3001 em Uso
+### Port 3001 in Use
 ```bash
-# Matar processo na porta 3001
+# Kill process on port 3001
 lsof -ti:3001 | xargs kill -9  # macOS/Linux
 netstat -ano | findstr :3001   # Windows (Power Shell)
 ```
 
-### Limpar Cache do npm
+### Clear npm Cache
 ```bash
 npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Variáveis de Ambiente Não Detectadas
+### Environment Variables Not Detected
 ```bash
-# Verificar arquivo .env
+# Check .env file
 cat .env.local
 
-# Restart dev server após mudanças em .env
+# Restart dev server after .env changes
 ```
 
-### Docker Não Funciona
+### Docker Not Working
 ```bash
-# Verificar Docker daemon
+# Check Docker daemon
 docker ps
 
-# Rebuild sem cache
+# Rebuild without cache
 docker build --no-cache -t bytebank-app .
 ```
 
 ---
 
-## 📊 Tecnologias em Detalhes
+## 📊 Technologies in Detail
 
 ### Frontend Stack
 
-| Tecnologia | Versão | Uso |
+| Technology | Version | Usage |
 |-----------|--------|-----|
 | React | 19.1.0 | UI Framework |
 | TypeScript | 5.8.3 | Type Safety |
@@ -558,7 +558,7 @@ docker build --no-cache -t bytebank-app .
 
 ### DevTools
 
-| Ferramenta | Versão | Propósito |
+| Tool | Version | Purpose |
 |----------|--------|----------|
 | Storybook | 9.0.16 | Component Docs |
 | Vitest | 3.2.4 | Unit Testing |
@@ -567,7 +567,7 @@ docker build --no-cache -t bytebank-app .
 
 ### Cloud & Infra
 
-| Serviço | Especificação | Região |
+| Service | Specification | Region |
 |--------|---------------|--------|
 | ECS Fargate | 0.25 vCPU / 0.5GB RAM | us-east-1 |
 | ECR | Private Registry | us-east-1 |
@@ -575,35 +575,35 @@ docker build --no-cache -t bytebank-app .
 
 ---
 
-## 🎓 Aprendizados & Boas Práticas
+## 🎓 Learnings & Best Practices
 
-### Padrões Implementados
+### Implemented Patterns
 
-1. **Component Composition** - Componentes pequenos e reutilizáveis
-2. **Custom Hooks** - Lógica reutilizável com `useQueryExtrato` e similares
+1. **Component Composition** - Small and reusable components
+2. **Custom Hooks** - Reusable logic with `useQueryExtrato` and similar
 3. **Type Safety** - Full TypeScript coverage
-4. **State Management** - Redux Toolkit com slices
+4. **State Management** - Redux Toolkit with slices
 5. **API Integration** - React Query + Axios
-6. **Error Handling** - Try/catch e error boundaries
+6. **Error Handling** - Try/catch and error boundaries
 7. **Performance** - Code splitting, lazy loading, memoization
-8. **Acessibilidade** - WCAG compliance com Material-UI
-9. **Responsividade** - Mobile-first approach
+8. **Accessibility** - WCAG compliance with Material-UI
+9. **Responsiveness** - Mobile-first approach
 
-### Decisões Arquiteturais
+### Architectural Decisions
 
-- **Material-UI** escolhido por: component library completa, tema customizável, suporte a acessibilidade
-- **Vite** escolhido por: performance superior, fast HMR, bundle size otimizado
-- **Redux Toolkit** escolhido por: simplificado vs Redux puro, menos boilerplate
-- **React Query** escolhido por: caching automático, sincronização de dados, devtools
-- **ECS Fargate** escolhido por: serverless, custo-benefício, escalabilidade automática
+- **Material-UI** chosen for: complete component library, customizable theme, accessibility support
+- **Vite** chosen for: superior performance, fast HMR, optimized bundle size
+- **Redux Toolkit** chosen for: simplified vs pure Redux, less boilerplate
+- **React Query** chosen for: automatic caching, data synchronization, devtools
+- **ECS Fargate** chosen for: serverless, cost-effectiveness, automatic scalability
 
 ---
 
-## 🔗 Links Úteis
+## 🔗 Useful Links
 
-- 🌐 [Aplicação em Produção](http://35.153.161.237)
+- 🌐 [Production Application](http://35.153.161.237)
 - 📱 [Storybook](http://localhost:6006)
-- 🎨 [Design Figma](https://www.figma.com/design/06sUi5crvAO4JuQHdGkdo2/Tech-Challenge)
+- 🎨 [Figma Design](https://www.figma.com/design/06sUi5crvAO4JuQHdGkdo2/Tech-Challenge)
 - 📚 [React Docs](https://react.dev)
 - 🎯 [Material-UI Docs](https://mui.com)
 - ⚡ [Vite Docs](https://vitejs.dev)
@@ -612,53 +612,51 @@ docker build --no-cache -t bytebank-app .
 
 ---
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para detalhes.
-
----
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Por favor:
-
-1. Faça um Fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 💬 Suporte
+## 🤝 Contributing
 
-Para dúvidas ou problemas:
+Contributions are welcome! Please:
 
-1. Verifique a seção [Troubleshooting](#-troubleshooting)
-2. Abra uma [Issue](https://github.com/jguerradasilva/bytebank-fiap-aws-deploy/issues)
-3. Contacte a equipe de desenvolvimento
-
----
-
-## ✅ Checklist de Desenvolvimento
-
-- [x] Prototipagem com Figma
-- [x] Configuração inicial (Vite + React + TypeScript)
-- [x] Setup Material-UI e temas
-- [x] Desenvolvimento de componentes reutilizáveis
-- [x] Integração com APIs (JSON Server + DummyJSON)
-- [x] Autenticação e proteção de rotas
-- [x] Gerenciamento de estado (Redux Toolkit)
-- [x] Documentação com Storybook
-- [x] Containerização (Docker multi-stage)
-- [x] Deploy em AWS ECS Fargate
-- [x] Monitoramento e logs (CloudWatch)
-- [x] CI/CD automatizado
-- [x] Testes unitários (Vitest)
-- [x] Testes E2E (Playwright)
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-**Desenvolvido com ❤️ pela turma 3FRNT | FIAP**
+## 💬 Support
 
-Última atualização: Dezembro 2025
+For questions or issues:
+
+1. Check the [Troubleshooting](#-troubleshooting) section
+2. Open an [Issue](https://github.com/jguerradasilva/bytebank-fiap-aws-deploy/issues)
+3. Contact the development team
+
+---
+
+## ✅ Development Checklist
+
+- [x] Prototyping with Figma
+- [x] Initial setup (Vite + React + TypeScript)
+- [x] Material-UI and themes setup
+- [x] Reusable component development
+- [x] API integration (JSON Server + DummyJSON)
+- [x] Authentication and route protection
+- [x] State management (Redux Toolkit)
+- [x] Documentation with Storybook
+- [x] Containerization (Docker multi-stage)
+- [x] Deployment on AWS ECS Fargate
+- [x] Monitoring and logs (CloudWatch)
+- [x] Automated CI/CD
+- [x] Unit tests (Vitest)
+- [x] E2E tests (Playwright)
+
+---
+
+Last updated: December 2025
