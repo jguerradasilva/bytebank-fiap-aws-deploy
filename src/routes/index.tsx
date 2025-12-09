@@ -1,18 +1,23 @@
-import PageBoleto from '@features/boleto/pages';
-import PageDashboard from '@features/dashboard/pages';
-import PageDeposito from '@features/deposito/pages';
-import PageExtrato from '@features/extrato/pages';
-import PageHome from '@features/home/pages';
-import { Layout } from '@features/common/pages/Layout';
-import PageNotFound from '@features/common/pages/NotFound';
-import PageTransferir from '@features/transferencia/pages';
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { PrivateRoute, PublicRoute } from '@shared/components';
+import { Layout } from '@features/common/pages/Layout';
+import { Loading } from '@shared/components/Loading';
+
+// Lazy loading das páginas para melhor performance
+const PageDashboard = lazy(() => import('@features/dashboard/pages'));
+const PageBoleto = lazy(() => import('@features/boleto/pages'));
+const PageDeposito = lazy(() => import('@features/deposito/pages'));
+const PageExtrato = lazy(() => import('@features/extrato/pages'));
+const PageTransferir = lazy(() => import('@features/transferencia/pages'));
+const PageHome = lazy(() => import('@features/home/pages'));
+const PageNotFound = lazy(() => import('@features/common/pages/NotFound'));
 
 export default function Rotas() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route element={<Layout />}>
         <Route
           path="/dashboard"
           element={
@@ -66,6 +71,7 @@ export default function Rotas() {
       />
 
       <Route path="/" element={<Navigate to="/home" />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
