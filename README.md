@@ -9,7 +9,7 @@ ByteBank is a modern digital banking platform developed with React 19, featuring
 **Developed by:**
 - Diego Minelli - RM362536
 - Jackson dos Santos - RM359898
-- Jefferson Guerra - RM363144
+- Jerfeson Guerra - RM363144
 - Raul Ferreira - RM362993
 - Thomas Aguiar - RM363369
 
